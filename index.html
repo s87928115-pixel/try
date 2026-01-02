@@ -850,20 +850,66 @@
         }
 
         function renderShop() {
-            document.getElementById('shopContainer').innerHTML = shopList.map(item => {
-                let contentHtml = '';
+            const container = document.getElementById('shopContainer');
+            
+            // ★ 修改容器樣式：變成 3 欄的網格 (Grid) ★
+            container.className = 'grid grid-cols-3 gap-2 pb-20'; 
+
+            if (shopList.length === 0) {
+                container.innerHTML = '<div class="col-span-3 text-center text-gray-300 text-sm py-8">暫無購買清單<br>點擊上方新增</div>';
+                return;
+            }
+
+            container.innerHTML = shopList.map(item => {
+                // 1. 處理圖片顯示 (有圖顯示圖，沒圖顯示圖示)
+                let imgContent = '';
+                if (item.img) {
+                    imgContent = `<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url(${item.img})"></div>`;
+                } else {
+                    imgContent = `<div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300"><i class="fa-solid fa-gift text-2xl"></i></div>`;
+                }
+
+                // 2. 處理「已購」遮罩
+                const boughtOverlay = item.bought 
+                    ? `<div class="absolute inset-0 bg-emerald-600/60 backdrop-blur-[1px] flex items-center justify-center z-10 animate-fade-in"><span class="text-white font-bold text-sm tracking-widest border-2 border-white px-2 py-1 rounded">已購</span></div>`
+                    : '';
+
+                // 3. 處理文字/連結內容
+                let textContent = '';
+                let textAction = ''; // 點擊文字的動作
+                
                 if (item.type === 'link') {
                     const url = item.text.match(/(https?:\/\/[^\s]+)/)[0];
-                    contentHtml = `<a href="${url}" target="_blank" class="block bg-gray-50 border border-gray-200 rounded p-2 hover:bg-gray-100 transition-colors mt-1"><div class="flex items-center"><div class="w-6 h-6 bg-blue-100 text-blue-500 rounded flex items-center justify-center mr-2 shrink-0"><i class="fa-solid fa-link text-xs"></i></div><div class="overflow-hidden min-w-0"><div class="text-[10px] font-bold text-gray-500 uppercase truncate">${item.meta}</div><div class="text-sm text-blue-600 truncate">${item.text}</div></div></div></a>`;
+                    textContent = `<span class="text-blue-600 underline truncate block"><i class="fa-solid fa-link text-[10px] mr-1"></i>${item.meta}</span>`;
+                    textAction = `onclick="window.open('${url}', '_blank')"`;
                 } else {
-                    contentHtml = `<div class="${item.bought ? 'line-through text-gray-400' : 'text-muji-text'} font-medium break-words mt-1">${item.text}</div>`;
+                    textContent = `<span class="truncate block text-gray-600">${item.text}</span>`;
                 }
-                const imgHtml = item.img ? `<div onclick="showFullImg('${item.img}')" class="w-16 h-16 bg-cover bg-center rounded-lg border border-gray-200 shrink-0 cursor-pointer shadow-sm hover:opacity-90" style="background-image: url(${item.img})"></div>` : '';
 
-                return `<div class="flex items-start bg-white p-3 rounded-xl shadow-sm border border-gray-100 group transition-all ${item.bought ? 'opacity-70 bg-gray-50' : ''}"><button onclick="toggleShop(${item.id})" class="mr-3 mt-1 text-xl shrink-0 transition-transform active:scale-90 ${item.bought ? 'text-green-500' : 'text-gray-300'}"><i class="fa-solid ${item.bought ? 'fa-square-check' : 'fa-square'}"></i></button><div class="flex-1 min-w-0 flex gap-3">${imgHtml}<div class="flex-1 min-w-0 flex flex-col justify-center">${contentHtml}</div></div><div class="flex flex-col items-end gap-2 ml-2">${item.bought ? '<span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">已購</span>' : ''}<button onclick="deleteShopItem(${item.id})" class="text-gray-300 hover:text-red-500 p-2 rounded-full hover:bg-red-50 transition-colors"><i class="fa-solid fa-trash"></i></button></div></div>`;
+                // 4. 組合卡片 HTML
+                return `
+                    <div class="relative group bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm flex flex-col aspect-[3/4]">
+                        
+                        <button onclick="deleteShopItem(${item.id})" class="absolute top-1 right-1 z-20 bg-white/80 hover:bg-red-500 hover:text-white text-gray-400 rounded-full w-6 h-6 flex items-center justify-center shadow-sm transition-colors">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+
+                        <div onclick="toggleShop(${item.id})" class="relative flex-1 cursor-pointer overflow-hidden border-b border-gray-100">
+                            ${imgContent}
+                            ${boughtOverlay}
+                            <div class="absolute bottom-1 right-1 z-10 text-white drop-shadow-md text-sm ${item.bought ? 'hidden' : 'opacity-50'}">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </div>
+                        </div>
+
+                        <div ${textAction} class="p-2 h-10 flex items-center bg-white text-[11px] font-medium leading-tight cursor-pointer hover:bg-gray-50">
+                            ${textContent}
+                        </div>
+                    </div>
+                `;
             }).join('');
         }
-
+        
         // --- Info & Food Logic (UPDATED FOR TABS) ---
         let qrCodes = JSON.parse(localStorage.getItem('trip_qrcodes')) || [];
         function initInfo() { renderHotels(); renderQRs(); }
