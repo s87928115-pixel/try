@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Japan Trip 2026</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        muji: {
+                            bg: '#fcfaf2', // 米色背景
+                            card: '#ffffff',
+                            text: '#4a4a4a',
+                            accent: '#2c5d63', // 沉穩藍綠
+                            secondary: '#8c8c8c',
+                            border: '#e6e6e6',
+                            highlight: '#d4493e', // 印章紅 (重要提醒)
+                            planA: '#5c7c8a', // 方案A顏色
+                            planB: '#c47c6e'  // 方案B顏色
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Zen Maru Gothic"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for App-like feel */
+        body {
+            background-color: #fcfaf2;
+            color: #4a4a4a;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+        }
+        
+        .page-container {
+            padding-bottom: 90px;
+            padding-top: 10px;
+            min-height: 100vh;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .page-container.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        /* Card Styles */
+        .muji-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .muji-btn {
+            background-color: #2c5d63;
+            color: white;
+            border-radius: 8px;
+            padding: 8px 16px;
+            transition: opacity 0.2s;
+        }
+        .muji-btn:active { opacity: 0.8; }
+
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e5e5;
+            z-index: 0;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #2c5d63;
+            border-radius: 50%;
+            border: 2px solid white;
+            z-index: 10;
+            position: relative;
+        }
+
+        .muji-input {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 10px;
+            width: 100%;
+            background: #fafafa;
+            outline: none;
+        }
+        .muji-input:focus { border-color: #2c5d63; background: white; }
+
+        /* Table Styles for Day 6 */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .schedule-table th {
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 6px;
+            color: #2c5d63;
+        }
+        .schedule-table td {
+            border-bottom: 1px solid #eee;
+            padding: 6px;
+        }
+        .tag-a { background-color: #5c7c8a; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .tag-b { background-color: #c47c6e; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+
+        /* Cover Image Styling */
+        #cover-area {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-color: #ddd;
+            position: relative;
+            transition: background-image 0.3s;
+        }
+        #cover-gradient {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+            position: absolute;
+            top:0; left:0; right:0; bottom:0;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-muji-text">
+
+    <div id="app" class="max-w-md mx-auto relative bg-muji-bg min-h-screen shadow-2xl">
+
+        <div id="cover-area" style="background-image: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+            <div id="cover-gradient"></div>
+            <div class="absolute bottom-4 left-4 text-white z-10">
+                <h1 class="text-2xl font-bold tracking-widest text-shadow">JAPAN 2026</h1>
+                <div class="text-xs opacity-90" id="weatherWidget">東京 ⛅ 8°C</div>
+            </div>
+            <label class="absolute bottom-4 right-4 bg-white/30 backdrop-blur-md p-2 rounded-full cursor-pointer hover:bg-white/50 z-20">
+                <i class="fa-solid fa-camera text-white"></i>
+                <input type="file" accept="image/*" class="hidden" onchange="changeCover(this)">
+            </label>
+        </div>
+        
+        <div class="sticky top-0 bg-white/95 backdrop-blur z-40 border-b border-muji-border px-4 py-2 flex justify-between items-center shadow-sm">
+            <div id="currentDate" class="font-bold text-muji-accent"></div>
+            <div class="text-xs text-muji-secondary">11 Days Trip</div>
+        </div>
+
+        <div id="page-plan" class="page-container active px-4">
+            <div id="itinerary-list" class="space-y-6 relative pb-10 mt-4">
+                </div>
+        </div>
+
+        <div id="page-food" class="page-container px-4">
+            <h2 class="text-2xl font-bold mb-4 mt-2 text-muji-text">Food Guide</h2>
+            <div id="food-list" class="space-y-4">
+                </div>
+        </div>
+
+        <div id="page-wallet" class="page-container px-4">
+            <h2 class="text-2xl font-bold mb-4 mt-2 text-muji-text">Wallet</h2>
+
+            <div class="muji-card p-4 mb-4 bg-white sticky top-16 z-30 shadow-md">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-bold text-muji-secondary">匯率換算 (1 JPY = <span id="displayRate">0.22</span> TWD)</span>
+                    <i class="fa-solid fa-gear text-gray-300 cursor-pointer" onclick="toggleRateEdit()"></i>
+                </div>
+                <div id="rateEditor" class="hidden mb-2">
+                    <input type="number" id="customRate" step="0.001" class="muji-input h-8 text-sm" placeholder="設定匯率" onchange="updateRate()">
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="relative w-full">
+                        <span class="absolute left-3 top-2.5 text-gray-400">¥</span>
+                        <input type="text" id="calcInput" class="muji-input pl-8 text-lg font-mono font-bold" placeholder="輸入算式 ex: 500+200">
+                    </div>
+                    <div class="text-2xl font-bold text-muji-accent">=</div>
+                    <div class="text-right min-w-[80px]">
+                        <div class="text-xs text-gray-400">NT$</div>
+                        <div class="text-xl font-bold" id="twdResult">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="muji-card p-4 mb-6">
+                <h3 class="text-sm font-bold mb-3 text-muji-accent">新增記帳</h3>
+                <div class="grid grid-cols-3 gap-2 mb-3">
+                    <input type="text" id="expenseItem" class="muji-input col-span-2" placeholder="品項名稱">
+                    <input type="number" id="expensePrice" class="muji-input" placeholder="¥金額">
+                </div>
+                <div class="flex justify-between items-center">
+                    <label class="flex items-center space-x-2 cursor-pointer bg-gray-100 px-3 py-2 rounded-lg text-sm">
+                        <i class="fa-solid fa-camera text-muji-secondary"></i>
+                        <input type="file" id="expenseImg" accept="image/*" class="hidden" onchange="handleImagePreview(this)">
+                    </label>
+                    <div id="imgPreviewArea" class="hidden w-8 h-8 rounded bg-cover bg-center border border-gray-300"></div>
+                    <button onclick="addExpense()" class="muji-btn text-sm px-6">儲存</button>
+                </div>
+            </div>
+
+            <div id="expenseList" class="space-y-3 pb-10"></div>
+        </div>
+
+        <div id="page-lists" class="page-container px-4">
+             <div class="flex space-x-2 mb-4 overflow-x-auto pb-2 mt-2" id="listTabs">
+                <button onclick="switchListTab('packing')" class="list-tab-btn active px-4 py-2 rounded-full text-sm font-bold border border-muji-accent bg-muji-accent text-white">必備清單</button>
+                <button onclick="switchListTab('memo')" class="list-tab-btn px-4 py-2 rounded-full text-sm font-bold border border-muji-border bg-white text-gray-500">備忘錄</button>
+                <button onclick="switchListTab('shop')" class="list-tab-btn px-4 py-2 rounded-full text-sm font-bold border border-muji-border bg-white text-gray-500">購買清單</button>
+            </div>
+            <div id="list-packing" class="list-content"></div>
+            <div id="list-memo" class="list-content hidden">
+                <textarea id="memoInput" class="muji-input h-32 mb-2" placeholder="輸入備忘事項... (輸入網址會自動變連結)"></textarea>
+                <button onclick="saveMemo()" class="muji-btn w-full mb-4">新增備忘</button>
+                <div id="memoContainer" class="space-y-3"></div>
+            </div>
+            <div id="list-shop" class="list-content hidden">
+                <div class="flex space-x-2 mb-2">
+                    <input type="text" id="shopInput" class="muji-input" placeholder="想買什麼...">
+                    <button onclick="addShopItem()" class="muji-btn whitespace-nowrap">新增</button>
+                </div>
+                 <div id="shopContainer" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <div id="page-info" class="page-container px-4">
+            <h2 class="text-2xl font-bold mb-4 mt-2 text-muji-text">Info & Docs</h2>
+            <div class="space-y-4">
+                <div class="muji-card p-4">
+                    <h3 class="font-bold mb-2 flex items-center"><i class="fa-solid fa-qrcode mr-2 text-muji-accent"></i> 入境 QR Code</h3>
+                    <div class="grid grid-cols-2 gap-4" id="qrContainer"></div>
+                    <label class="mt-3 block text-center border-2 border-dashed border-gray-300 rounded-lg p-2 cursor-pointer hover:bg-gray-50">
+                        <span class="text-xs text-gray-500">+ 上傳截圖</span>
+                        <input type="file" accept="image/*" class="hidden" onchange="addQRCode(this)">
+                    </label>
+                </div>
+                <div class="muji-card p-4 border-l-4 border-red-500">
+                    <h3 class="font-bold text-red-600 mb-2">緊急聯絡</h3>
+                    <ul class="text-sm space-y-2">
+                        <li>👮 警察: 110 / 🚑 救護: 119</li>
+                        <li>🇹🇼 駐日代表處 (東京): +81-3-3280-7811</li>
+                    </ul>
+                </div>
+                <div class="muji-card">
+                    <button class="w-full text-left p-4 font-bold flex justify-between items-center" onclick="toggleAccordion('hotelInfo')">
+                        <span>🏨 住宿資訊</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="hotelInfo" class="hidden px-4 pb-4 text-sm space-y-4 border-t border-gray-100 pt-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-200 flex justify-around items-center py-2 z-50 pb-safe">
+            <button onclick="navTo('plan')" class="nav-btn active flex flex-col items-center p-2 text-muji-secondary w-full">
+                <i class="fa-regular fa-calendar-days text-xl mb-1"></i><span class="text-[10px]">行程</span>
+            </button>
+            <button onclick="navTo('food')" class="nav-btn flex flex-col items-center p-2 text-muji-secondary w-full">
+                <i class="fa-solid fa-utensils text-xl mb-1"></i><span class="text-[10px]">食記</span>
+            </button>
+            <button onclick="navTo('wallet')" class="nav-btn flex flex-col items-center p-2 text-muji-secondary w-full">
+                <i class="fa-solid fa-wallet text-xl mb-1"></i><span class="text-[10px]">記帳</span>
+            </button>
+            <button onclick="navTo('lists')" class="nav-btn flex flex-col items-center p-2 text-muji-secondary w-full">
+                <i class="fa-solid fa-list-check text-xl mb-1"></i><span class="text-[10px]">清單</span>
+            </button>
+            <button onclick="navTo('info')" class="nav-btn flex flex-col items-center p-2 text-muji-secondary w-full">
+                <i class="fa-solid fa-circle-info text-xl mb-1"></i><span class="text-[10px]">資訊</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <script>
+        // --- DATA OBJECTS ---
+        const hotels = [
+            { name: "輕井澤王子飯店西館", date: "2/24-2/27", address: "389-0193 長野縣北佐久郡輕井澤町輕井澤1016-85", tel: "+81-(0)267-42-1113" },
+            { name: "LANDABOUT TOKYO", date: "2/27-2/28", address: "東京都, 東京, Taito-ku Negishi 3-4-5", tel: "+81-3-6802-4437" },
+            { name: "Route Inn 新莊站前", date: "2/28-3/1", address: "山形県新庄市金沢沖1109-6", tel: "050-1809-5168" },
+            { name: "The OneFive Sendai", date: "3/1-3/4", address: "4 Chome-6-28 Tsutsujigaoka, Miyagino Ward, Sendai, Miyagi 983-0852", tel: "" },
+            { name: "Route Inn Yamagataminami", date: "3/4", address: "1 Chome-1-11 Iidanishi, Yamagata, 990-2331", tel: "" },
+            { name: "The OneFive Sendai", date: "3/5", address: "4 Chome-6-28 Tsutsujigaoka, Miyagino Ward, Sendai, Miyagi 983-0852", tel: "" },
+        ];
+
+        const packingList = {
+            "個人物品": ["護照", "信用卡", "身分證", "現金", "身分證影本", "護照影本", "駕照", "國際駕照", "駕照譯本"],
+            "雜物": ["衣物", "帽子", "太陽眼鏡", "隱眼", "梳子", "保養品", "藥品"],
+            "電子產品": ["充電器", "充電線", "行動電源", "萬國插座", "GoPro", "電池/記憶卡", "網卡"],
+            "滑雪準備": ["雪鏡", "排汗衣", "保暖長袖", "手套", "長襪", "防滑鞋", "屁墊", "暖暖包", "護膝", "護手", "冰爪"]
+        };
+
+        const itinerary = [
+            { 
+                day: 1, date: "2/24 (二)", title: "抵達 & 移動輕井澤", icon: "fa-plane",
+                events: [
+                    { time: "06:40", title: "酷航 TR898 出發", note: "第一航廈", type: "flight" },
+                    { time: "10:45", title: "抵達成田機場", type: "flight" },
+                    { time: "11:13~", title: "搭車前往上野", note: "車程50分", type: "train" },
+                    { time: "12:00", title: "上野午餐", type: "food" },
+                    { time: "15:10", title: "新幹線 -> 輕井澤", note: "上野出發", type: "train", highlight: true },
+                    { time: "16:30", title: "租雪具", address: "4-8 KARUIZAWAHIGASHI, KARUIZAWA, KITASAKU DISTRICT, NAGANO 389-0104", type: "activity" },
+                    { time: "18:00", title: "晚餐", type: "food" }
+                ]
+            },
+            {
+                day: 2, date: "2/25 (三)", title: "滑雪日", icon: "fa-person-skiing",
+                events: [
+                    { time: "All Day", title: "滑雪", note: "輕井澤滑雪場", type: "activity" }
+                ]
+            },
+            {
+                day: 3, date: "2/26 (四)", title: "滑雪 & 租車", icon: "fa-person-skiing",
+                events: [
+                    { time: "09:00", title: "滑雪", note: "至 16:00", type: "activity" },
+                    { time: "17:00", title: "租車", type: "car", highlight: true }
+                ]
+            },
+            {
+                day: 4, date: "2/27 (五)", title: "輕井澤觀光 & 回東京", icon: "fa-camera",
+                events: [
+                    { time: "09:30", title: "榆樹街小鎮", type: "sight" },
+                    { time: "11:00", title: "雲場池", type: "sight" },
+                    { time: "11:30", title: "舊輕井澤銀座通", type: "sight" },
+                    { time: "13:57", title: "新幹線回上野", type: "train", highlight: true },
+                    { time: "18:00", title: "上野晚餐", type: "food" }
+                ]
+            },
+            {
+                day: 5, date: "2/28 (六)", title: "東京逛街 -> 山形新庄", icon: "fa-train",
+                events: [
+                    { time: "09:30", title: "妙義神社", address: "3 Chome-16-16 Komagome, Toshima City, Tokyo", type: "sight" },
+                    { time: "10:30", title: "池袋太陽城", type: "shop" },
+                    { time: "14:00", title: "新幹線 -> 新庄", type: "train", highlight: true }
+                ]
+            },
+            {
+                day: 6, date: "3/1 (日)", title: "最上川遊船 -> 仙台", icon: "fa-ship",
+                events: [
+                    { time: "08:10", title: "JR陸羽西線 -> 古口", note: "08:50抵達", type: "train" },
+                    { time: "09:00", title: "最上川遊船", type: "activity", highlight: true },
+                    { 
+                        type: "html",
+                        content: `
+                        <div class="mt-2 text-sm bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-bold text-muji-accent mb-2"><i class="fa-solid fa-train"></i> 回程與移動時刻表</h4>
+                            
+                            <div class="mb-3">
+                                <span class="font-bold text-gray-600 border-b-2 border-gray-200">Local: 古口/高屋 ⮕ 新庄</span>
+                                <table class="schedule-table">
+                                    <tr><th>路線</th><th>出發</th><th>抵達</th></tr>
+                                    <tr><td>高屋⮕新庄</td><td>12:05</td><td>12:54</td></tr>
+                                    <tr><td>古口⮕新庄</td><td>12:18</td><td>12:54</td></tr>
+                                    <tr><td>古口⮕新庄</td><td>13:39</td><td>14:05</td></tr>
+                                </table>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="tag-a mb-1 inline-block">PLAN A</span> <span class="text-xs font-bold text-muji-planA">新幹線 (轉福島)</span>
+                                <table class="schedule-table">
+                                    <tr><th>區間</th><th>班次 1</th><th>班次 2</th></tr>
+                                    <tr><td>新庄⮕福島</td><td>13:18 - 15:14</td><td>15:17 - 17:14</td></tr>
+                                    <tr><td>福島⮕仙台</td><td>15:37 - 17:24</td><td>16:05 - 17:46</td></tr>
+                                </table>
+                            </div>
+
+                            <div>
+                                <span class="tag-b mb-1 inline-block">PLAN B</span> <span class="text-xs font-bold text-muji-planB">JR奧羽本線 + 巴士/仙山線</span>
+                                <table class="schedule-table">
+                                    <tr><th>區間</th><th>時間 / 備註</th></tr>
+                                    <tr><td>新庄⮕山形</td><td>14:19-15:32 / 16:14-17:23</td></tr>
+                                    <tr><td>山形⮕仙台</td><td>高速巴士 (每30分一班, 車程1H)</td></tr>
+                                    <tr><td>JR仙山線</td><td>山形18:02 - 仙台19:32</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        `
+                    },
+                    { time: "19:40", title: "Check in & 晚餐", type: "hotel" }
+                ]
+            },
+            {
+                day: 7, date: "3/2 (一)", title: "分流行程: 山寺 vs 採草莓", icon: "fa-arrows-split-up-and-left",
+                events: [
+                    { 
+                        type: "html", 
+                        content: `
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg border-l-4 border-muji-planA shadow-sm overflow-hidden">
+                                <div class="bg-slate-50 p-2 font-bold text-muji-planA flex justify-between items-center">
+                                    <span><i class="fa-solid fa-person-hiking"></i> PLAN A: 山寺</span>
+                                </div>
+                                <div class="p-3 space-y-3">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <div class="text-sm font-bold">出發 (JR仙山線)</div>
+                                            <div class="text-xs text-gray-500">8:18 或 9:12 從仙台出發</div>
+                                        </div>
+                                        <button onclick="openMap('Yamadera, Yamagata')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i> 導航</button>
+                                    </div>
+                                    <div class="flex justify-between items-start pt-2 border-t border-gray-100">
+                                        <div>
+                                            <div class="text-sm font-bold">13:00 午餐: 焰藏</div>
+                                            <div class="text-xs text-gray-500">山形蕎麦の焔藏 山寺店</div>
+                                        </div>
+                                        <button onclick="openMap('Yamagata Soba no Enzou Yamadera')" class="text-muji-accent text-sm"><i class="fa-solid fa-utensils"></i> 導航</button>
+                                    </div>
+                                    <div class="pt-2 border-t border-gray-100">
+                                        <div class="text-sm font-bold">回程</div>
+                                        <div class="text-xs text-gray-500">14:09 或 15:28 列車回仙台</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg border-l-4 border-muji-planB shadow-sm overflow-hidden">
+                                <div class="bg-orange-50 p-2 font-bold text-muji-planB flex justify-between items-center">
+                                    <span><i class="fa-solid fa-car-side"></i> PLAN B: 仙台自駕</span>
+                                </div>
+                                <div class="p-3 space-y-3">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <div class="text-xs font-bold text-gray-400">08:30</div>
+                                            <div class="text-sm font-bold">仙台朝市</div>
+                                        </div>
+                                        <button onclick="openMap('Sendai Morning Market')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i> 導航</button>
+                                    </div>
+                                    <div class="text-xs bg-gray-100 p-1 rounded text-center">9:30 辦理租車</div>
+                                    <div class="flex justify-between items-start pt-2 border-t border-gray-100">
+                                        <div>
+                                            <div class="text-xs font-bold text-gray-400">10:00</div>
+                                            <div class="text-sm font-bold">採草莓: 一苺一笑 松森農場</div>
+                                            <div class="text-[10px] text-gray-400">Shiromae-157-1 Matsumori</div>
+                                        </div>
+                                        <button onclick="openMap('Ichigo Ichie Matsumori Farm')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i> 導航</button>
+                                    </div>
+                                    <div class="flex justify-between items-start pt-2 border-t border-gray-100">
+                                        <div>
+                                            <div class="text-xs font-bold text-gray-400">11:30</div>
+                                            <div class="text-sm font-bold">UJIE 超市 吉岡店</div>
+                                            <div class="text-[10px] text-gray-400">午餐 / 補給</div>
+                                        </div>
+                                        <button onclick="openMap('UJIE Supermarket Yoshioka')" class="text-muji-accent text-sm"><i class="fa-solid fa-cart-shopping"></i> 導航</button>
+                                    </div>
+                                    <div class="flex justify-between items-start pt-2 border-t border-gray-100">
+                                        <div>
+                                            <div class="text-xs font-bold text-gray-400">13:00</div>
+                                            <div class="text-sm font-bold">Costco 富谷倉庫店</div>
+                                        </div>
+                                        <button onclick="openMap('Costco Tomiya')" class="text-muji-accent text-sm"><i class="fa-solid fa-cart-shopping"></i> 導航</button>
+                                    </div>
+                                    <div class="text-xs bg-gray-100 p-1 rounded text-center mt-2">16:00 返回仙台車站</div>
+                                </div>
+                            </div>
+                        </div>
+                        `
+                    }
+                ]
+            },
+            {
+                day: 8, date: "3/3 (二)", title: "仙台市區觀光", icon: "fa-torii-gate",
+                events: [
+                    { time: "09:30", title: "瑞鳳殿", type: "sight" },
+                    { time: "11:00", title: "大崎八幡宮", type: "sight" },
+                    { time: "15:00", title: "租車", type: "car", highlight: true },
+                    { time: "18:30", title: "晚餐: 肉十八", type: "food" }
+                ]
+            },
+            {
+                day: 9, date: "3/4 (三)", title: "狐狸村 & 藏王樹冰", icon: "fa-snowflake",
+                events: [
+                    { time: "09:00", title: "金神水神社", address: "日本〒989-2464 Miyagi, Iwanuma, Miiroyoshi, Suijin−７", type: "sight" },
+                    { time: "10:30", title: "藏王狐狸村", address: "日本〒989-0733 Miyagi, Shiroishi, 福岡八宮川原子１１−３", type: "activity", highlight: true },
+                    { time: "12:40", title: "遠刈田溫泉", address: "Togattaonsen Motomachi, 藏王町", type: "sight" },
+                    { time: "15:15", title: "藏王樹冰", address: "229-3 Zaoonsen, Yamagata", type: "sight", highlight: true },
+                    { time: "17:30", title: "Check-in 山形", type: "hotel" },
+                    { time: "18:00", title: "晚餐", type: "food" }
+                ]
+            },
+            {
+                day: 10, date: "3/5 (四)", title: "銀山溫泉 & 松島", icon: "fa-spa",
+                events: [
+                    { time: "09:10", title: "道の駅 天童温泉", type: "shop" },
+                    { time: "10:40", title: "大正浪漫館", note: "搭11:00接駁車 -> 銀山溫泉", type: "bus", highlight: true },
+                    { time: "12:30", title: "接駁車回大正浪漫館", type: "bus" },
+                    { time: "16:00", title: "松島海岸", address: "Matsushima, Miyagi District, Miyagi 981-0213", type: "sight" },
+                    { time: "18:00", title: "三井 OUTLET 仙台港", type: "shop" }
+                ]
+            },
+            {
+                day: 11, date: "3/6 (五)", title: "回程", icon: "fa-plane-departure",
+                events: [
+                    { time: "11:30", title: "仙台 -> AEON MALL", type: "shop" },
+                    { time: "14:47", title: "前往仙台機場", type: "train" },
+                    { time: "17:25", title: "星宇 JX863 起飛", note: "20:35 抵達台灣", type: "flight", highlight: true }
+                ]
+            }
+        ];
+
+        const foodData = [
+            { day: "D1 上野/輕井澤", spots: [
+                { name: "蟹食放題 ごっつお", type: "午餐", address: "東京都文京區湯島ライワビル 4F", note: "螃蟹吃到飽" },
+                { name: "東京炸豬排 がぶう", type: "午餐", address: "東京都台東區上野4-6-4 OGSⅡ B1F", note: "" },
+                { name: "しゃぶしゃぶ愛宕", type: "晚餐", address: "389-0104長野県北佐久郡軽井沢町東167", note: "輕井澤涮涮鍋", tel: "0267-41-6111" },
+                { name: "村民食堂", type: "晚餐", address: "389-0104長野県北佐久郡軽井沢町長倉2148", note: "星野區", tel: "0267-44-3571" }
+            ]},
+            { day: "D4 東京上野", spots: [
+                { name: "三浦三崎港迴轉壽司", type: "晚餐", address: "東京都台東區上野6-12-14", note: "食材堆得像山一樣" },
+                { name: "ぽん多本家 豬排", type: "晚餐", address: "東京都台東区上野3-23-3", note: "" },
+                { name: "上野兔屋 銅鑼燒", type: "甜點", address: "東京都台東区上野１丁目１０−10", note: "" }
+            ]},
+            { day: "D7 山寺/仙台", spots: [
+                { name: "焰藏 (山寺店)", type: "午餐", address: "Yamagata Soba no Enzou Yamadera", note: "山形蕎麥麵" }
+            ]},
+            { day: "D8 仙台", spots: [
+                { name: "肉十八", type: "晚餐", address: "Sendai", note: "燒肉" }
+            ]},
+             { day: "D9 山形", spots: [
+                { name: "酒菜一", type: "晚餐", address: "1 Chome-7-7 Kasumicho, Yamagata", tel:"+815054841844", note: "" },
+                { name: "山形肉問屋センター", type: "晚餐", address: "Yamagata, Saiwaicho, 1−4 駅南ビル 1F", tel:"+817011455641", note: "" }
+            ]}
+        ];
+
+        // --- INIT & NAVIGATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initPlan();
+            initFood();
+            initWallet();
+            initLists();
+            initInfo();
+            updateDate();
+            loadCover();
+        });
+
+        function navTo(pageId) {
+            document.querySelectorAll('.page-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-muji-accent');
+                el.classList.add('text-muji-secondary');
+            });
+            event.currentTarget.classList.remove('text-muji-secondary');
+            event.currentTarget.classList.add('text-muji-accent');
+            
+            window.scrollTo(0,0);
+        }
+
+        function updateDate() {
+            const d = new Date();
+            const str = `${d.getMonth()+1}/${d.getDate()}`;
+            document.getElementById('currentDate').innerText = str;
+        }
+
+        function openMap(address) {
+            if(!address) return;
+            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+            window.open(url, '_blank');
+        }
+
+        // --- COVER IMAGE ---
+        function loadCover() {
+            const savedCover = localStorage.getItem('trip_cover');
+            if(savedCover) {
+                document.getElementById('cover-area').style.backgroundImage = `url(${savedCover})`;
+            }
+        }
+        function changeCover(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        // Compress slightly to save LocalStorage space
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 800;
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        
+                        document.getElementById('cover-area').style.backgroundImage = `url(${dataUrl})`;
+                        localStorage.setItem('trip_cover', dataUrl);
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- PLAN MODULE ---
+        function initPlan() {
+            const container = document.getElementById('itinerary-list');
+            let html = '';
+
+            itinerary.forEach((day, index) => {
+                let eventsHtml = '';
+                day.events.forEach(evt => {
+                    if (evt.type === 'html') {
+                        // Custom HTML Block for Tables (Day 6 / 7)
+                        eventsHtml += `
+                            <div class="relative pl-8 pb-4">
+                                <div class="timeline-dot absolute left-[-5px] top-1"></div>
+                                ${evt.content}
+                            </div>
+                        `;
+                    } else {
+                        // Standard Event
+                        const highlightClass = evt.highlight ? 'text-muji-highlight font-bold' : '';
+                        const borderClass = evt.highlight ? 'border-l-4 border-muji-highlight pl-2' : '';
+                        const mapBtn = evt.address ? `<button onclick="openMap('${evt.address}')" class="ml-2 text-muji-accent"><i class="fa-solid fa-location-dot"></i></button>` : '';
+                        
+                        eventsHtml += `
+                            <div class="relative pl-8 pb-6 last:pb-0">
+                                <div class="timeline-dot absolute left-[-5px] top-1"></div>
+                                <div class="text-sm font-bold text-muji-accent">${evt.time}</div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm mt-1 border border-gray-100 ${borderClass}">
+                                    <div class="font-medium text-base ${highlightClass}">${evt.title} ${mapBtn}</div>
+                                    ${evt.note ? `<div class="text-xs text-gray-500 mt-1">${evt.note}</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                html += `
+                    <div class="relative mb-8">
+                        <div class="timeline-line"></div>
+                        <div class="flex items-center mb-4 sticky top-10 bg-muji-bg z-20 py-2">
+                            <div class="bg-muji-accent text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
+                                ${day.day}
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="font-bold text-lg">${day.date}</h3>
+                                <div class="text-xs text-gray-500 flex items-center gap-2">
+                                    <i class="fa-solid ${day.icon}"></i> ${day.title}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            ${eventsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // --- FOOD MODULE ---
+        function initFood() {
+            const container = document.getElementById('food-list');
+            let html = '';
+            foodData.forEach(section => {
+                html += `<h3 class="font-bold text-lg mt-6 mb-3 border-b border-gray-200 pb-1 text-muji-accent">${section.day}</h3>`;
+                section.spots.forEach(spot => {
+                    html += `
+                        <div class="muji-card p-0 flex flex-col">
+                            <div class="p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <span class="text-xs font-bold bg-orange-100 text-orange-600 px-2 py-0.5 rounded">${spot.type}</span>
+                                        <h4 class="font-bold text-lg mt-1">${spot.name}</h4>
+                                    </div>
+                                    <button onclick="openMap('${spot.address}')" class="bg-blue-50 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center">
+                                        <i class="fa-solid fa-location-arrow text-sm"></i>
+                                    </button>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2"><i class="fa-solid fa-map-pin mr-1"></i> ${spot.address}</p>
+                                ${spot.tel ? `<p class="text-sm text-gray-500"><i class="fa-solid fa-phone mr-1"></i> ${spot.tel}</p>` : ''}
+                                ${spot.note ? `<div class="mt-3 text-sm bg-gray-50 p-2 rounded text-gray-600">"${spot.note}"</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            container.innerHTML = html;
+        }
+
+        // --- WALLET MODULE ---
+        let rate = localStorage.getItem('trip_rate') || 0.22;
+        let expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
+
+        function initWallet() {
+            document.getElementById('displayRate').innerText = rate;
+            document.getElementById('calcInput').addEventListener('input', calculate);
+            renderExpenses();
+        }
+
+        function toggleRateEdit() {
+            document.getElementById('rateEditor').classList.toggle('hidden');
+        }
+
+        function updateRate() {
+            const val = parseFloat(document.getElementById('customRate').value);
+            if(val) {
+                rate = val;
+                localStorage.setItem('trip_rate', rate);
+                document.getElementById('displayRate').innerText = rate;
+                calculate();
+                renderExpenses();
+                toggleRateEdit();
+            }
+        }
+
+        function calculate() {
+            const input = document.getElementById('calcInput').value;
+            const resEl = document.getElementById('twdResult');
+            try {
+                if(input.match(/^[0-9+\-*/.() ]+$/)) {
+                    const jpy = new Function('return ' + input)();
+                    const twd = Math.round(jpy * rate);
+                    resEl.innerText = twd.toLocaleString();
+                } else if(input === '') {
+                    resEl.innerText = '0';
+                }
+            } catch(e) {}
+        }
+
+        let currentExpenseImg = null;
+        function handleImagePreview(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 400;
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        currentExpenseImg = canvas.toDataURL('image/jpeg', 0.6);
+                        
+                        const preview = document.getElementById('imgPreviewArea');
+                        preview.style.backgroundImage = `url(${currentExpenseImg})`;
+                        preview.classList.remove('hidden');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function addExpense() {
+            const item = document.getElementById('expenseItem').value;
+            const price = parseFloat(document.getElementById('expensePrice').value);
+            
+            if(!item || !price) return alert('請輸入項目與金額');
+
+            expenses.unshift({
+                id: Date.now(),
+                item,
+                price,
+                img: currentExpenseImg,
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('trip_expenses', JSON.stringify(expenses));
+            
+            document.getElementById('expenseItem').value = '';
+            document.getElementById('expensePrice').value = '';
+            document.getElementById('imgPreviewArea').classList.add('hidden');
+            currentExpenseImg = null;
+            renderExpenses();
+        }
+
+        function deleteExpense(id) {
+            if(confirm('確定刪除?')) {
+                expenses = expenses.filter(e => e.id !== id);
+                localStorage.setItem('trip_expenses', JSON.stringify(expenses));
+                renderExpenses();
+            }
+        }
+
+        function renderExpenses() {
+            const list = document.getElementById('expenseList');
+            let html = '';
+            let totalJ = 0;
+            expenses.forEach(e => {
+                totalJ += e.price;
+                html += `
+                    <div class="bg-white p-3 rounded-lg shadow-sm flex justify-between items-center border border-gray-100">
+                        <div class="flex items-center gap-3">
+                             ${e.img ? `<div onclick="showFullImg('${e.img}')" class="w-10 h-10 bg-cover bg-center rounded bg-gray-200 flex-shrink-0" style="background-image:url(${e.img})"></div>` : `<div class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400"><i class="fa-solid fa-yen-sign"></i></div>`}
+                            <div>
+                                <div class="font-bold text-sm">${e.item}</div>
+                                <div class="text-xs text-gray-400">${e.date}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">¥${e.price}</div>
+                            <div class="text-xs text-gray-400">NT$${Math.round(e.price * rate)}</div>
+                            <button onclick="deleteExpense(${e.id})" class="text-gray-300 text-xs mt-1"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        function showFullImg(src) {
+            const w = window.open("");
+            w.document.write(`<img src="${src}" style="width:100%">`);
+        }
+
+        // --- LISTS MODULE ---
+        let userChecklist = JSON.parse(localStorage.getItem('trip_checklist')) || {};
+        let memoList = JSON.parse(localStorage.getItem('trip_memos')) || [];
+        let shopList = JSON.parse(localStorage.getItem('trip_shop')) || [];
+
+        function initLists() {
+            renderPacking();
+            renderMemo();
+            renderShop();
+        }
+
+        function switchListTab(tab) {
+            document.querySelectorAll('.list-tab-btn').forEach(b => {
+                b.classList.remove('bg-muji-accent', 'text-white', 'border-muji-accent');
+                b.classList.add('bg-white', 'text-gray-500', 'border-muji-border');
+            });
+            event.currentTarget.classList.remove('bg-white', 'text-gray-500', 'border-muji-border');
+            event.currentTarget.classList.add('bg-muji-accent', 'text-white', 'border-muji-accent');
+
+            document.querySelectorAll('.list-content').forEach(d => d.classList.add('hidden'));
+            document.getElementById(`list-${tab}`).classList.remove('hidden');
+        }
+
+        function renderPacking() {
+            const container = document.getElementById('list-packing');
+            let html = '';
+            for (const [category, items] of Object.entries(packingList)) {
+                html += `<div class="mb-4"><h3 class="font-bold text-muji-accent mb-2">${category}</h3><div class="space-y-2">`;
+                items.forEach(item => {
+                    const isChecked = userChecklist[item] ? 'checked' : '';
+                    const strike = userChecklist[item] ? 'line-through text-gray-400' : '';
+                    html += `
+                        <label class="flex items-center bg-white p-3 rounded shadow-sm border border-gray-100">
+                            <input type="checkbox" class="w-5 h-5 accent-teal-700 mr-3" ${isChecked} onchange="toggleCheck('${item}')">
+                            <span class="${strike}">${item}</span>
+                        </label>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function toggleCheck(item) {
+            userChecklist[item] = !userChecklist[item];
+            localStorage.setItem('trip_checklist', JSON.stringify(userChecklist));
+            renderPacking();
+        }
+
+        function saveMemo() {
+            const txt = document.getElementById('memoInput').value;
+            if(!txt) return;
+            memoList.push({ id: Date.now(), text: txt });
+            localStorage.setItem('trip_memos', JSON.stringify(memoList));
+            document.getElementById('memoInput').value = '';
+            renderMemo();
+        }
+        
+        function renderMemo() {
+            const c = document.getElementById('memoContainer');
+            c.innerHTML = memoList.map(m => {
+                const linkedText = m.text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>');
+                return `
+                <div class="bg-yellow-50 p-3 rounded shadow-sm border border-yellow-100 text-sm relative">
+                    <button onclick="deleteMemo(${m.id})" class="absolute top-1 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="whitespace-pre-wrap pr-4">${linkedText}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function deleteMemo(id) {
+            memoList = memoList.filter(m => m.id !== id);
+            localStorage.setItem('trip_memos', JSON.stringify(memoList));
+            renderMemo();
+        }
+
+        function addShopItem() {
+            const txt = document.getElementById('shopInput').value;
+            if(!txt) return;
+            shopList.push({ id: Date.now(), text: txt, bought: false });
+            localStorage.setItem('trip_shop', JSON.stringify(shopList));
+            document.getElementById('shopInput').value = '';
+            renderShop();
+        }
+
+        function toggleShop(id) {
+            const idx = shopList.findIndex(i => i.id === id);
+            if(idx > -1) {
+                shopList[idx].bought = !shopList[idx].bought;
+                localStorage.setItem('trip_shop', JSON.stringify(shopList));
+                renderShop();
+            }
+        }
+
+        function renderShop() {
+            const c = document.getElementById('shopContainer');
+            c.innerHTML = shopList.map(item => `
+                <div class="flex justify-between items-center bg-white p-3 rounded shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <button onclick="toggleShop(${item.id})" class="mr-3 text-xl ${item.bought ? 'text-green-500' : 'text-gray-300'}">
+                            <i class="fa-solid ${item.bought ? 'fa-square-check' : 'fa-square'}"></i>
+                        </button>
+                        <span class="${item.bought ? 'line-through text-gray-400' : ''}">${item.text}</span>
+                    </div>
+                    ${item.bought ? '<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">已購</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // --- INFO MODULE ---
+        let qrCodes = JSON.parse(localStorage.getItem('trip_qrcodes')) || [];
+
+        function initInfo() {
+            renderHotels();
+            renderQRs();
+        }
+
+        function renderHotels() {
+            const c = document.getElementById('hotelInfo');
+            c.innerHTML = hotels.map(h => `
+                <div class="pb-2 border-b border-gray-100 last:border-0">
+                    <div class="text-xs font-bold bg-gray-200 inline-block px-1 rounded text-gray-600 mb-1">${h.date}</div>
+                    <div class="font-bold text-base text-muji-accent">${h.name}</div>
+                    <div class="text-xs text-gray-500 mt-1">${h.address}</div>
+                    <div class="flex gap-3 mt-2">
+                         <button onclick="openMap('${h.address}')" class="text-blue-500 text-xs underline">地圖</button>
+                         ${h.tel ? `<a href="tel:${h.tel}" class="text-blue-500 text-xs underline">撥打電話</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleAccordion(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function addQRCode(input) {
+             if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    qrCodes.push(e.target.result);
+                    localStorage.setItem('trip_qrcodes', JSON.stringify(qrCodes));
+                    renderQRs();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function renderQRs() {
+            const c = document.getElementById('qrContainer');
+            c.innerHTML = qrCodes.map((src, idx) => `
+                <div class="relative group">
+                    <img src="${src}" class="w-full rounded border border-gray-200" onclick="showFullImg('${src}')">
+                    <button onclick="deleteQR(${idx})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-80"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function deleteQR(idx) {
+            if(confirm('刪除此 QR Code?')) {
+                qrCodes.splice(idx, 1);
+                localStorage.setItem('trip_qrcodes', JSON.stringify(qrCodes));
+                renderQRs();
+            }
+        }
+    </script>
+</body>
+</html>
