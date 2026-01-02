@@ -58,8 +58,16 @@
             opacity: 1;
         }
 
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        /* Hide Scrollbar but allow functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
+        /* Card Styles */
         .muji-card {
             background: white;
             border-radius: 12px;
@@ -108,61 +116,51 @@
         }
         .muji-input:focus { border-color: #2c5d63; background: white; }
 
-        /* Day Tabs - High Visibility */
+        /* FIXED STICKY HEADER */
         .sticky-header {
             position: sticky;
             top: 0;
-            z-index: 50;
-            background-color: #2c5d63; /* Dark background for contrast */
+            z-index: 999; /* Max Z-Index */
+            background-color: #2c5d63; 
             color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            padding-top: 10px; /* Safe area */
         }
         
         .day-tabs-container {
             display: flex;
             overflow-x: auto;
             gap: 12px;
-            padding: 12px 16px;
-            scrollbar-width: none;
+            padding: 10px 16px;
             align-items: center;
         }
         
         .day-tab {
             flex: 0 0 auto;
-            width: 44px;
-            height: 44px;
+            width: 48px; /* Larger Touch Target */
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
             background: rgba(255,255,255,0.2);
             color: white;
             border: 2px solid transparent;
+            cursor: pointer;
             transition: all 0.2s;
+            user-select: none;
         }
         
         .day-tab.active {
             background-color: white;
             color: #2c5d63;
             transform: scale(1.1);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
-        .day-tab span {
-            font-size: 0.7rem;
-            display: block;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        /* Schedule Table */
-        .schedule-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 8px; }
-        .schedule-table th { text-align: left; background-color: #f5f5f5; padding: 6px; color: #2c5d63; }
-        .schedule-table td { border-bottom: 1px solid #eee; padding: 6px; }
-        .tag-a { background-color: #5c7c8a; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
-        .tag-b { background-color: #c47c6e; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
-
-        /* Cover */
+        /* Cover Area */
         #cover-area {
             height: 180px;
             background-size: cover;
@@ -174,7 +172,7 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
             position: absolute; top:0; left:0; right:0; bottom:0;
         }
-        
+
         /* Weather Badge */
         .weather-badge {
             display: inline-flex;
@@ -186,6 +184,13 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
+
+        /* Schedule Table */
+        .schedule-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 8px; }
+        .schedule-table th { text-align: left; background-color: #f5f5f5; padding: 6px; color: #2c5d63; }
+        .schedule-table td { border-bottom: 1px solid #eee; padding: 6px; }
+        .tag-a { background-color: #5c7c8a; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .tag-b { background-color: #c47c6e; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
     </style>
 </head>
 <body class="font-sans antialiased text-muji-text">
@@ -207,10 +212,10 @@
         <div id="page-plan" class="page-container active">
             
             <div class="sticky-header">
-                <div class="day-tabs-container" id="dayTabs">
+                <div class="day-tabs-container no-scrollbar" id="dayTabs">
                     </div>
-                <div class="text-center text-[10px] text-white/50 pb-1">
-                    <i class="fa-solid fa-caret-up"></i> 點擊切換天數
+                <div class="text-center text-[10px] text-white/50 pb-1 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="fa-solid fa-caret-up"></i> 點擊天數切換
                 </div>
             </div>
 
@@ -219,10 +224,10 @@
                     </div>
 
                 <div class="flex justify-between mb-8 pt-4 border-t border-gray-200">
-                    <button onclick="changeDayOffset(-1)" id="btnPrev" class="text-muji-secondary px-4 py-3 bg-white border border-gray-200 rounded-lg shadow-sm disabled:opacity-30 flex items-center">
+                    <button onclick="changeDayOffset(-1)" id="btnPrev" class="text-muji-secondary px-4 py-3 bg-white border border-gray-200 rounded-lg shadow-sm disabled:opacity-30 flex items-center transition-transform active:scale-95">
                         <i class="fa-solid fa-chevron-left mr-2"></i> 上一天
                     </button>
-                    <button onclick="changeDayOffset(1)" id="btnNext" class="text-white px-4 py-3 bg-muji-accent rounded-lg shadow-sm font-bold disabled:opacity-30 flex items-center">
+                    <button onclick="changeDayOffset(1)" id="btnNext" class="text-white px-4 py-3 bg-muji-accent rounded-lg shadow-sm font-bold disabled:opacity-30 flex items-center transition-transform active:scale-95">
                         下一天 <i class="fa-solid fa-chevron-right ml-2"></i>
                     </button>
                 </div>
@@ -358,7 +363,7 @@
             { day: 11, date: "3/6 (五)", title: "回程", icon: "fa-plane-departure", weather: { text: "仙台/台灣 晴", icon: "fa-sun", link: "Miyagi/Sendai" }, events: [{ time: "11:30", title: "AEON MALL", type: "shop" }, { time: "14:47", title: "前往仙台機場", type: "train" }, { time: "17:25", title: "星宇 JX863 起飛", note: "20:35 抵達台灣", type: "flight", highlight: true }] }
         ];
 
-        // ... [Other Data] ...
+        // --- Data ---
         const hotels = [
             { name: "輕井澤王子飯店西館", date: "2/24-2/27", address: "389-0193 長野縣北佐久郡輕井澤町輕井澤1016-85", tel: "+81-(0)267-42-1113" },
             { name: "LANDABOUT TOKYO", date: "2/27-2/28", address: "東京都, 東京, Taito-ku Negishi 3-4-5", tel: "+81-3-6802-4437" },
@@ -381,12 +386,14 @@
              { day: "D9 山形", spots: [{ name: "酒菜一", type: "晚餐", address: "1 Chome-7-7 Kasumicho, Yamagata", tel:"+815054841844", note: "" }, { name: "山形肉問屋センター", type: "晚餐", address: "Yamagata, Saiwaicho, 1−4 駅南ビル 1F", tel:"+817011455641", note: "" }]}
         ];
 
-        // --- CORE LOGIC (FIXED) ---
+        // --- Core Logic ---
         let currentDayIndex = 0;
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderDayTabs(); // Render tabs ONCE
-            jumpToDay(0);    // Start at Day 1
+            renderDayTabs();
+            // Start at Day 0 (First Day)
+            jumpToDay(0);
+            
             initFood();
             initWallet();
             initLists();
@@ -401,32 +408,38 @@
             document.getElementById('globalWeather').innerHTML = `${dateStr} 東京 ⛅ 8°C`;
         }
 
-        // --- FIXED NAVIGATION LOGIC ---
+        // --- NAVIGATION ---
         function renderDayTabs() {
             const container = document.getElementById('dayTabs');
-            // Use ABSOLUTE index in onclick: jumpToDay(0), jumpToDay(1)...
+            // Explicitly verify index is correct in the loop
             container.innerHTML = itinerary.map((day, idx) => `
-                <button onclick="jumpToDay(${idx})" class="day-tab ${idx === 0 ? 'active' : ''}" id="tab-${idx}">
+                <div onclick="jumpToDay(${idx})" class="day-tab ${idx === 0 ? 'active' : ''}" id="tab-${idx}">
                     D${day.day}
-                </button>
+                </div>
             `).join('');
         }
 
-        // New function: Jump to specific index (Absolute)
+        // Main Jump Function
         function jumpToDay(index) {
-            if (index < 0) index = 0;
+            // Force integer parsing to be safe
+            index = parseInt(index, 10);
+            
+            // Boundary checks
+            if (isNaN(index) || index < 0) index = 0;
             if (index >= itinerary.length) index = itinerary.length - 1;
             
+            currentDayIndex = index;
             renderDay(index);
+            
+            // Scroll content to top for better UX
+            window.scrollTo(0, 0);
         }
 
-        // New function: Jump relative to current (for Footer Buttons)
         function changeDayOffset(offset) {
             jumpToDay(currentDayIndex + offset);
         }
 
         function renderDay(index) {
-            currentDayIndex = index;
             const day = itinerary[index];
             const container = document.getElementById('day-content');
 
@@ -440,9 +453,12 @@
                 }
             });
 
-            // Update Footer Buttons Status
+            // Update Footer Buttons
             document.getElementById('btnPrev').disabled = (index === 0);
+            document.getElementById('btnPrev').style.opacity = (index === 0) ? '0.3' : '1';
+            
             document.getElementById('btnNext').disabled = (index === itinerary.length - 1);
+            document.getElementById('btnNext').style.opacity = (index === itinerary.length - 1) ? '0.3' : '1';
 
             // Render Events
             let eventsHtml = '';
@@ -493,57 +509,364 @@
                 </div>
             `;
             
-            // Trigger animation
+            // Animation
             container.animate([
                 { opacity: 0, transform: 'translateY(5px)' },
                 { opacity: 1, transform: 'translateY(0)' }
             ], { duration: 250, easing: 'ease-out' });
         }
 
-        // --- HELPERS ---
+        // --- Helpers ---
         function navTo(pageId) {
             document.querySelectorAll('.page-container').forEach(el => el.classList.remove('active'));
             document.getElementById(`page-${pageId}`).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(el => { el.classList.remove('text-muji-accent'); el.classList.add('text-muji-secondary'); });
-            event.currentTarget.classList.remove('text-muji-secondary'); event.currentTarget.classList.add('text-muji-accent');
+            
+            document.querySelectorAll('.nav-btn').forEach(el => { 
+                el.classList.remove('text-muji-accent'); 
+                el.classList.add('text-muji-secondary'); 
+            });
+            event.currentTarget.classList.remove('text-muji-secondary'); 
+            event.currentTarget.classList.add('text-muji-accent');
+            
             window.scrollTo(0,0);
         }
-        function openMap(address) { if(!address) return; window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank'); }
-        function openWeather(loc) { window.open(`https://www.google.com/search?q=weather+${loc}+japan`, '_blank'); }
-        function loadCover() { const s = localStorage.getItem('trip_cover'); if(s) document.getElementById('cover-area').style.backgroundImage = `url(${s})`; }
-        function changeCover(i) { if (i.files && i.files[0]) { const r = new FileReader(); r.onload = function (e) { const img = new Image(); img.src = e.target.result; img.onload = function() { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 800/img.width; c.width=800; c.height=img.height*s; ctx.drawImage(img,0,0,c.width,c.height); const d = c.toDataURL('image/jpeg',0.7); document.getElementById('cover-area').style.backgroundImage = `url(${d})`; localStorage.setItem('trip_cover', d); }}; r.readAsDataURL(i.files[0]); }}
 
-        // --- WALLET & OTHERS (Minified for space, logic unchanged) ---
-        let rate = localStorage.getItem('trip_rate') || 0.22, expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
-        function initWallet(){document.getElementById('displayRate').innerText=rate;document.getElementById('calcInput').addEventListener('input',calculate);renderExpenses()}
-        function toggleRateEdit(){document.getElementById('rateEditor').classList.toggle('hidden')}
-        function updateRate(){const v=parseFloat(document.getElementById('customRate').value);if(v){rate=v;localStorage.setItem('trip_rate',rate);document.getElementById('displayRate').innerText=rate;calculate();renderExpenses();toggleRateEdit()}}
-        function calculate(){const v=document.getElementById('calcInput').value;try{if(v.match(/^[0-9+\-*/.() ]+$/))document.getElementById('twdResult').innerText=Math.round(new Function('return '+v)()*rate).toLocaleString()}catch(e){}}
-        let currentExpenseImg=null;
-        function handleImagePreview(i){if(i.files&&i.files[0]){const r=new FileReader();r.onload=function(e){const img=new Image();img.src=e.target.result;img.onload=function(){const c=document.createElement('canvas');const x=c.getContext('2d');const s=400/img.width;c.width=400;c.height=img.height*s;x.drawImage(img,0,0,c.width,c.height);currentExpenseImg=c.toDataURL('image/jpeg',0.6);document.getElementById('imgPreviewArea').style.backgroundImage=`url(${currentExpenseImg})`;document.getElementById('imgPreviewArea').classList.remove('hidden')}};r.readAsDataURL(i.files[0])}}
-        function addExpense(){const i=document.getElementById('expenseItem').value,p=parseFloat(document.getElementById('expensePrice').value);if(!i||!p)return alert('Missing info');expenses.unshift({id:Date.now(),item:i,price:p,img:currentExpenseImg,date:new Date().toLocaleDateString()});localStorage.setItem('trip_expenses',JSON.stringify(expenses));document.getElementById('expenseItem').value='';document.getElementById('expensePrice').value='';document.getElementById('imgPreviewArea').classList.add('hidden');currentExpenseImg=null;renderExpenses()}
-        function deleteExpense(id){if(confirm('Delete?')){expenses=expenses.filter(e=>e.id!==id);localStorage.setItem('trip_expenses',JSON.stringify(expenses));renderExpenses()}}
-        function renderExpenses(){document.getElementById('expenseList').innerHTML=expenses.map(e=>`<div class="bg-white p-3 rounded-lg shadow-sm flex justify-between items-center border border-gray-100"><div class="flex items-center gap-3">${e.img?`<div onclick="showFullImg('${e.img}')" class="w-10 h-10 bg-cover bg-center rounded bg-gray-200 flex-shrink-0" style="background-image:url(${e.img})"></div>`:`<div class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400"><i class="fa-solid fa-yen-sign"></i></div>`}<div><div class="font-bold text-sm">${e.item}</div><div class="text-xs text-gray-400">${e.date}</div></div></div><div class="text-right"><div class="font-bold">¥${e.price}</div><div class="text-xs text-gray-400">NT$${Math.round(e.price*rate)}</div><button onclick="deleteExpense(${e.id})" class="text-gray-300 text-xs mt-1"><i class="fa-solid fa-trash"></i></button></div></div>`).join('')}
-        function showFullImg(s){const w=window.open("");w.document.write(`<img src="${s}" style="width:100%">`)}
+        function openMap(address) {
+            if(!address) return;
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
+        }
+
+        function openWeather(loc) {
+            window.open(`https://www.google.com/search?q=weather+${loc}+japan`, '_blank');
+        }
+
+        // Cover Logic
+        function loadCover() {
+            const s = localStorage.getItem('trip_cover');
+            if(s) document.getElementById('cover-area').style.backgroundImage = `url(${s})`;
+        }
+        function changeCover(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 800;
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById('cover-area').style.backgroundImage = `url(${dataUrl})`;
+                        localStorage.setItem('trip_cover', dataUrl);
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- Wallet Logic (Expanded) ---
+        let rate = localStorage.getItem('trip_rate') || 0.22;
+        let expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
+
+        function initWallet() {
+            document.getElementById('displayRate').innerText = rate;
+            document.getElementById('calcInput').addEventListener('input', calculate);
+            renderExpenses();
+        }
+
+        function toggleRateEdit() {
+            document.getElementById('rateEditor').classList.toggle('hidden');
+        }
+
+        function updateRate() {
+            const val = parseFloat(document.getElementById('customRate').value);
+            if(val) {
+                rate = val;
+                localStorage.setItem('trip_rate', rate);
+                document.getElementById('displayRate').innerText = rate;
+                calculate();
+                renderExpenses();
+                toggleRateEdit();
+            }
+        }
+
+        function calculate() {
+            const input = document.getElementById('calcInput').value;
+            try {
+                if(input.match(/^[0-9+\-*/.() ]+$/)) {
+                    const jpy = new Function('return ' + input)();
+                    document.getElementById('twdResult').innerText = Math.round(jpy * rate).toLocaleString();
+                }
+            } catch(e) {}
+        }
+
+        let currentExpenseImg = null;
+        function handleImagePreview(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 400;
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        currentExpenseImg = canvas.toDataURL('image/jpeg', 0.6);
+                        document.getElementById('imgPreviewArea').style.backgroundImage = `url(${currentExpenseImg})`;
+                        document.getElementById('imgPreviewArea').classList.remove('hidden');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function addExpense() {
+            const item = document.getElementById('expenseItem').value;
+            const price = parseFloat(document.getElementById('expensePrice').value);
+            if(!item || !price) return alert('請輸入項目與金額');
+            
+            expenses.unshift({
+                id: Date.now(),
+                item,
+                price,
+                img: currentExpenseImg,
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('trip_expenses', JSON.stringify(expenses));
+            
+            document.getElementById('expenseItem').value = '';
+            document.getElementById('expensePrice').value = '';
+            document.getElementById('imgPreviewArea').classList.add('hidden');
+            currentExpenseImg = null;
+            renderExpenses();
+        }
+
+        function deleteExpense(id) {
+            if(confirm('確定刪除?')) {
+                expenses = expenses.filter(e => e.id !== id);
+                localStorage.setItem('trip_expenses', JSON.stringify(expenses));
+                renderExpenses();
+            }
+        }
+
+        function renderExpenses() {
+            const list = document.getElementById('expenseList');
+            list.innerHTML = expenses.map(e => `
+                <div class="bg-white p-3 rounded-lg shadow-sm flex justify-between items-center border border-gray-100">
+                    <div class="flex items-center gap-3">
+                         ${e.img ? `<div onclick="showFullImg('${e.img}')" class="w-10 h-10 bg-cover bg-center rounded bg-gray-200 flex-shrink-0" style="background-image:url(${e.img})"></div>` : `<div class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400"><i class="fa-solid fa-yen-sign"></i></div>`}
+                        <div>
+                            <div class="font-bold text-sm">${e.item}</div>
+                            <div class="text-xs text-gray-400">${e.date}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold">¥${e.price}</div>
+                        <div class="text-xs text-gray-400">NT$${Math.round(e.price * rate)}</div>
+                        <button onclick="deleteExpense(${e.id})" class="text-gray-300 text-xs mt-1"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showFullImg(src) {
+            const w = window.open("");
+            w.document.write(`<img src="${src}" style="width:100%">`);
+        }
+
+        // --- Lists Logic (Expanded) ---
+        let userChecklist = JSON.parse(localStorage.getItem('trip_checklist')) || {};
+        let memoList = JSON.parse(localStorage.getItem('trip_memos')) || [];
+        let shopList = JSON.parse(localStorage.getItem('trip_shop')) || [];
+
+        function initLists() {
+            renderPacking();
+            renderMemo();
+            renderShop();
+        }
+
+        function switchListTab(tab) {
+            document.querySelectorAll('.list-tab-btn').forEach(b => {
+                b.classList.remove('bg-muji-accent', 'text-white', 'border-muji-accent');
+                b.classList.add('bg-white', 'text-gray-500', 'border-muji-border');
+            });
+            event.currentTarget.classList.remove('bg-white', 'text-gray-500', 'border-muji-border');
+            event.currentTarget.classList.add('bg-muji-accent', 'text-white', 'border-muji-accent');
+            
+            document.querySelectorAll('.list-content').forEach(d => d.classList.add('hidden'));
+            document.getElementById(`list-${tab}`).classList.remove('hidden');
+        }
+
+        function renderPacking() {
+            let html = '';
+            for (const [category, items] of Object.entries(packingList)) {
+                html += `<div class="mb-4"><h3 class="font-bold text-muji-accent mb-2">${category}</h3><div class="space-y-2">`;
+                html += items.map(item => `
+                    <label class="flex items-center bg-white p-3 rounded shadow-sm border border-gray-100">
+                        <input type="checkbox" class="w-5 h-5 accent-teal-700 mr-3" ${userChecklist[item] ? 'checked' : ''} onchange="toggleCheck('${item}')">
+                        <span class="${userChecklist[item] ? 'line-through text-gray-400' : ''}">${item}</span>
+                    </label>
+                `).join('');
+                html += `</div></div>`;
+            }
+            document.getElementById('list-packing').innerHTML = html;
+        }
+
+        function toggleCheck(item) {
+            userChecklist[item] = !userChecklist[item];
+            localStorage.setItem('trip_checklist', JSON.stringify(userChecklist));
+            renderPacking();
+        }
+
+        function saveMemo() {
+            const txt = document.getElementById('memoInput').value;
+            if(txt) {
+                memoList.push({ id: Date.now(), text: txt });
+                localStorage.setItem('trip_memos', JSON.stringify(memoList));
+                document.getElementById('memoInput').value = '';
+                renderMemo();
+            }
+        }
+
+        function renderMemo() {
+            document.getElementById('memoContainer').innerHTML = memoList.map(m => `
+                <div class="bg-yellow-50 p-3 rounded shadow-sm border border-yellow-100 text-sm relative">
+                    <button onclick="deleteMemo(${m.id})" class="absolute top-1 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="whitespace-pre-wrap pr-4">${m.text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>')}</div>
+                </div>
+            `).join('');
+        }
+
+        function deleteMemo(id) {
+            memoList = memoList.filter(m => m.id !== id);
+            localStorage.setItem('trip_memos', JSON.stringify(memoList));
+            renderMemo();
+        }
+
+        function addShopItem() {
+            const txt = document.getElementById('shopInput').value;
+            if(txt) {
+                shopList.push({ id: Date.now(), text: txt, bought: false });
+                localStorage.setItem('trip_shop', JSON.stringify(shopList));
+                document.getElementById('shopInput').value = '';
+                renderShop();
+            }
+        }
+
+        function toggleShop(id) {
+            const idx = shopList.findIndex(i => i.id === id);
+            if(idx > -1) {
+                shopList[idx].bought = !shopList[idx].bought;
+                localStorage.setItem('trip_shop', JSON.stringify(shopList));
+                renderShop();
+            }
+        }
+
+        function renderShop() {
+            document.getElementById('shopContainer').innerHTML = shopList.map(item => `
+                <div class="flex justify-between items-center bg-white p-3 rounded shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <button onclick="toggleShop(${item.id})" class="mr-3 text-xl ${item.bought ? 'text-green-500' : 'text-gray-300'}">
+                            <i class="fa-solid ${item.bought ? 'fa-square-check' : 'fa-square'}"></i>
+                        </button>
+                        <span class="${item.bought ? 'line-through text-gray-400' : ''}">${item.text}</span>
+                    </div>
+                    ${item.bought ? '<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">已購</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // --- Info & Food Logic (Expanded) ---
+        let qrCodes = JSON.parse(localStorage.getItem('trip_qrcodes')) || [];
+
+        function initInfo() {
+            renderHotels();
+            renderQRs();
+        }
+
+        function renderHotels() {
+            document.getElementById('hotelInfo').innerHTML = hotels.map(h => `
+                <div class="pb-2 border-b border-gray-100 last:border-0">
+                    <div class="text-xs font-bold bg-gray-200 inline-block px-1 rounded text-gray-600 mb-1">${h.date}</div>
+                    <div class="font-bold text-base text-muji-accent">${h.name}</div>
+                    <div class="text-xs text-gray-500 mt-1">${h.address}</div>
+                    <div class="flex gap-3 mt-2">
+                         <button onclick="openMap('${h.address}')" class="text-blue-500 text-xs underline">地圖</button>
+                         ${h.tel ? `<a href="tel:${h.tel}" class="text-blue-500 text-xs underline">撥打電話</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleAccordion(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function addQRCode(input) {
+             if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    qrCodes.push(e.target.result);
+                    localStorage.setItem('trip_qrcodes', JSON.stringify(qrCodes));
+                    renderQRs();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function renderQRs() {
+            document.getElementById('qrContainer').innerHTML = qrCodes.map((src, idx) => `
+                <div class="relative group">
+                    <img src="${src}" class="w-full rounded border border-gray-200" onclick="showFullImg('${src}')">
+                    <button onclick="deleteQR(${idx})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-80"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function deleteQR(idx) {
+            if(confirm('刪除?')) {
+                qrCodes.splice(idx, 1);
+                localStorage.setItem('trip_qrcodes', JSON.stringify(qrCodes));
+                renderQRs();
+            }
+        }
         
-        let userChecklist=JSON.parse(localStorage.getItem('trip_checklist'))||{},memoList=JSON.parse(localStorage.getItem('trip_memos'))||[],shopList=JSON.parse(localStorage.getItem('trip_shop'))||[],qrCodes=JSON.parse(localStorage.getItem('trip_qrcodes'))||[];
-        function initLists(){renderPacking();renderMemo();renderShop()}
-        function switchListTab(t){document.querySelectorAll('.list-tab-btn').forEach(b=>{b.classList.remove('bg-muji-accent','text-white','border-muji-accent');b.classList.add('bg-white','text-gray-500','border-muji-border')});event.currentTarget.classList.remove('bg-white','text-gray-500','border-muji-border');event.currentTarget.classList.add('bg-muji-accent','text-white','border-muji-accent');document.querySelectorAll('.list-content').forEach(d=>d.classList.add('hidden'));document.getElementById(`list-${t}`).classList.remove('hidden')}
-        function renderPacking(){let h='';for(const[c,i]of Object.entries(packingList)){h+=`<div class="mb-4"><h3 class="font-bold text-muji-accent mb-2">${c}</h3><div class="space-y-2">`+i.map(m=>`<label class="flex items-center bg-white p-3 rounded shadow-sm border border-gray-100"><input type="checkbox" class="w-5 h-5 accent-teal-700 mr-3" ${userChecklist[m]?'checked':''} onchange="toggleCheck('${m}')"><span class="${userChecklist[m]?'line-through text-gray-400':''}">${m}</span></label>`).join('')+`</div></div>`}document.getElementById('list-packing').innerHTML=h}
-        function toggleCheck(i){userChecklist[i]=!userChecklist[i];localStorage.setItem('trip_checklist',JSON.stringify(userChecklist));renderPacking()}
-        function saveMemo(){const t=document.getElementById('memoInput').value;if(t){memoList.push({id:Date.now(),text:t});localStorage.setItem('trip_memos',JSON.stringify(memoList));document.getElementById('memoInput').value='';renderMemo()}}
-        function renderMemo(){document.getElementById('memoContainer').innerHTML=memoList.map(m=>`<div class="bg-yellow-50 p-3 rounded shadow-sm border border-yellow-100 text-sm relative"><button onclick="deleteMemo(${m.id})" class="absolute top-1 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button><div class="whitespace-pre-wrap pr-4">${m.text.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>')}</div></div>`).join('')}
-        function deleteMemo(id){memoList=memoList.filter(m=>m.id!==id);localStorage.setItem('trip_memos',JSON.stringify(memoList));renderMemo()}
-        function addShopItem(){const t=document.getElementById('shopInput').value;if(t){shopList.push({id:Date.now(),text:t,bought:false});localStorage.setItem('trip_shop',JSON.stringify(shopList));document.getElementById('shopInput').value='';renderShop()}}
-        function renderShop(){document.getElementById('shopContainer').innerHTML=shopList.map(i=>`<div class="flex justify-between items-center bg-white p-3 rounded shadow-sm border border-gray-100"><div class="flex items-center"><button onclick="toggleShop(${i.id})" class="mr-3 text-xl ${i.bought?'text-green-500':'text-gray-300'}"><i class="fa-solid ${i.bought?'fa-square-check':'fa-square'}"></i></button><span class="${i.bought?'line-through text-gray-400':''}">${i.text}</span></div>${i.bought?'<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">已購</span>':''}</div>`).join('')}
-        function toggleShop(id){const x=shopList.findIndex(i=>i.id===id);if(x>-1){shopList[x].bought=!shopList[x].bought;localStorage.setItem('trip_shop',JSON.stringify(shopList));renderShop()}}
-        function initInfo(){renderHotels();renderQRs()}
-        function renderHotels(){document.getElementById('hotelInfo').innerHTML=hotels.map(h=>`<div class="pb-2 border-b border-gray-100 last:border-0"><div class="text-xs font-bold bg-gray-200 inline-block px-1 rounded text-gray-600 mb-1">${h.date}</div><div class="font-bold text-base text-muji-accent">${h.name}</div><div class="text-xs text-gray-500 mt-1">${h.address}</div><div class="flex gap-3 mt-2"><button onclick="openMap('${h.address}')" class="text-blue-500 text-xs underline">地圖</button>${h.tel?`<a href="tel:${h.tel}" class="text-blue-500 text-xs underline">撥打電話</a>`:''}</div></div>`).join('')}
-        function toggleAccordion(id){document.getElementById(id).classList.toggle('hidden')}
-        function addQRCode(i){if(i.files&&i.files[0]){const r=new FileReader();r.onload=function(e){qrCodes.push(e.target.result);localStorage.setItem('trip_qrcodes',JSON.stringify(qrCodes));renderQRs()};r.readAsDataURL(i.files[0])}}
-        function renderQRs(){document.getElementById('qrContainer').innerHTML=qrCodes.map((s,i)=>`<div class="relative group"><img src="${s}" class="w-full rounded border border-gray-200" onclick="showFullImg('${s}')"><button onclick="deleteQR(${i})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-80"><i class="fa-solid fa-xmark"></i></button></div>`).join('')}
-        function deleteQR(i){if(confirm('Delete?')){qrCodes.splice(i,1);localStorage.setItem('trip_qrcodes',JSON.stringify(qrCodes));renderQRs()}}
-        function initFood(){let h='';foodData.forEach(s=>{h+=`<h3 class="font-bold text-lg mt-6 mb-3 border-b border-gray-200 pb-1 text-muji-accent">${s.day}</h3>`;s.spots.forEach(p=>{h+=`<div class="muji-card p-0 flex flex-col"><div class="p-4"><div class="flex justify-between items-start"><div><span class="text-xs font-bold bg-orange-100 text-orange-600 px-2 py-0.5 rounded">${p.type}</span><h4 class="font-bold text-lg mt-1">${p.name}</h4></div><button onclick="openMap('${p.address}')" class="bg-blue-50 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-location-arrow text-sm"></i></button></div><p class="text-sm text-gray-500 mt-2"><i class="fa-solid fa-map-pin mr-1"></i> ${p.address}</p>${p.tel?`<p class="text-sm text-gray-500"><i class="fa-solid fa-phone mr-1"></i> ${p.tel}</p>`:''}${p.note?`<div class="mt-3 text-sm bg-gray-50 p-2 rounded text-gray-600">"${p.note}"</div>`:''}</div></div>`})});document.getElementById('food-list').innerHTML=h}
+        function initFood() {
+            let html = '';
+            foodData.forEach(section => {
+                html += `<h3 class="font-bold text-lg mt-6 mb-3 border-b border-gray-200 pb-1 text-muji-accent">${section.day}</h3>`;
+                section.spots.forEach(spot => {
+                    html += `
+                        <div class="muji-card p-0 flex flex-col">
+                            <div class="p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <span class="text-xs font-bold bg-orange-100 text-orange-600 px-2 py-0.5 rounded">${spot.type}</span>
+                                        <h4 class="font-bold text-lg mt-1">${spot.name}</h4>
+                                    </div>
+                                    <button onclick="openMap('${spot.address}')" class="bg-blue-50 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center">
+                                        <i class="fa-solid fa-location-arrow text-sm"></i>
+                                    </button>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2"><i class="fa-solid fa-map-pin mr-1"></i> ${spot.address}</p>
+                                ${spot.tel ? `<p class="text-sm text-gray-500"><i class="fa-solid fa-phone mr-1"></i> ${spot.tel}</p>` : ''}
+                                ${spot.note ? `<div class="mt-3 text-sm bg-gray-50 p-2 rounded text-gray-600">"${spot.note}"</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            document.getElementById('food-list').innerHTML = html;
+        }
+
     </script>
 </body>
 </html>
