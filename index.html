@@ -11,7 +11,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <script>
@@ -29,8 +28,8 @@
                             highlight: '#d4493e',
                             planA: '#5c7c8a',
                             planB: '#c47c6e',
-                            leave: '#718096', // 離開顏色
-                            join: '#e53e3e'   // 加入顏色
+                            leave: '#718096',
+                            join: '#e53e3e'
                         }
                     },
                     fontFamily: {
@@ -199,7 +198,7 @@
         <div id="cover-area" style="background-image: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
             <div id="cover-gradient"></div>
             <div class="absolute bottom-4 left-4 text-white z-10">
-                <h1 class="text-2xl font-bold tracking-widest text-shadow">JAPAN 2026</h1>
+                <h1 class="text-2xl font-bold tracking-widest text-shadow">滑雪不跌倒>滑雪不ㄉ
                 <div class="text-xs opacity-90" id="globalWeather">Today: 東京 ⛅ 8°C</div>
                 <div class="text-[10px] bg-white/20 px-2 py-0.5 rounded inline-block mt-1">Full Trip (11 Days)</div>
             </div>
@@ -210,7 +209,6 @@
         </div>
         
         <div id="page-plan" class="page-container active">
-            
             <div class="sticky-header">
                 <div class="day-tabs-container no-scrollbar" id="dayTabs"></div>
                 <div class="text-center text-[10px] text-white/50 pb-1 cursor-pointer" onclick="window.scrollTo(0,0)">
@@ -332,7 +330,7 @@
                     </div>
                 </div>
 
-                <div id="shopContainer" class="space-y-3 pb-20"></div>
+                <div id="shopContainer" class="grid grid-cols-3 gap-2 pb-20"></div>
             </div>
         </div>
 
@@ -385,7 +383,7 @@
     </div>
 
     <script>
-        // --- FULL ITINERARY (11 DAYS) with MERGED EVENTS ---
+        // --- 1. DEFAULT ITINERARY DATA (備份用) ---
         const defaultItinerary = [
             { day: 1, date: "2/24 (二)", title: "抵達 & 移動輕井澤", icon: "fa-plane", weather: { text: "東京 晴 5~11°C", icon: "fa-sun", link: "Tokyo" }, events: [{ time: "06:40", title: "酷航 TR898 出發", note: "第一航廈", type: "flight" }, { time: "10:45", title: "抵達成田機場", type: "flight" }, { time: "11:13~", title: "搭車前往上野", note: "車程50分", type: "train" }, { time: "12:00", title: "上野午餐", type: "food" }, { time: "15:10", title: "新幹線 -> 輕井澤", note: "上野出發", type: "train", highlight: true }, { time: "16:30", title: "租雪具", address: "4-8 KARUIZAWAHIGASHI", type: "activity" }, { time: "18:00", title: "晚餐", type: "food" }] },
             { day: 2, date: "2/25 (三)", title: "滑雪日", icon: "fa-person-skiing", weather: { text: "輕井澤 雪 -2~3°C", icon: "fa-snowflake", link: "Nagano/Karuizawa" }, events: [{ time: "All Day", title: "滑雪", note: "輕井澤滑雪場", type: "activity" }] },
@@ -396,7 +394,6 @@
                 events: [
                     { time: "09:30", title: "妙義神社", address: "3 Chome-16-16 Komagome", type: "sight" }, 
                     { time: "10:30", title: "池袋太陽城", type: "shop" },
-                    // 插入阿王阿真回程
                     { time: "14:20", title: "阿王阿真前往機場", note: "搭 Skyliner -> 成田 (CI105 17:45起飛)", type: "train", highlight: true, customColor: "text-muji-leave border-muji-leave" },
                     { time: "14:00", title: "本隊: 新幹線 -> 新庄", type: "train", highlight: true }
                 ] 
@@ -409,7 +406,6 @@
                     { time: "09:30", title: "瑞鳳殿", type: "sight" }, 
                     { time: "11:00", title: "大崎八幡宮", type: "sight" }, 
                     { time: "15:00", title: "租車", type: "car", highlight: true },
-                    // 插入家族會合
                     { time: "16:00", title: "家族抵達仙台機場", note: "星宇 JX862", type: "flight", customColor: "text-muji-join border-muji-join" },
                     { time: "17:30", title: "仙台車站大會合", note: "接人", type: "activity", highlight: true },
                     { time: "18:30", title: "晚餐: 肉十八", type: "food" }
@@ -419,94 +415,16 @@
             { day: 10, date: "3/5 (四)", title: "銀山溫泉 & 松島", icon: "fa-spa", weather: { text: "山形/松島 陰 3~8°C", icon: "fa-cloud", link: "Yamagata" }, events: [{ time: "09:10", title: "道の駅 天童温泉", type: "shop" }, { time: "10:40", title: "銀山溫泉接駁", note: "大正浪漫館搭車", type: "bus", highlight: true }, { time: "16:00", title: "松島海岸", type: "sight" }, { time: "18:00", title: "三井 OUTLET 仙台港", type: "shop" }] },
             { day: 11, date: "3/6 (五)", title: "回程", icon: "fa-plane-departure", weather: { text: "仙台/台灣 晴", icon: "fa-sun", link: "Miyagi/Sendai" }, events: [{ time: "11:30", title: "AEON MALL", type: "shop" }, { time: "14:47", title: "前往仙台機場", type: "train" }, { time: "17:25", title: "星宇 JX863 起飛", note: "20:35 抵達台灣", type: "flight", highlight: true }] }
         ];
-         let itinerary = JSON.parse(localStorage.getItem('trip_itinerary')) || defaultItinerary;
 
-        // 存檔用的函式
+        // --- 2. DYNAMIC ITINERARY LOGIC ---
+        // 優先讀取 LocalStorage，如果沒有才用 Default
+        let itinerary = JSON.parse(localStorage.getItem('trip_itinerary')) || defaultItinerary;
+
         function saveItinerary() {
             localStorage.setItem('trip_itinerary', JSON.stringify(itinerary));
-            renderDay(currentDayIndex); // 重新畫面
+            renderDay(currentDayIndex);
         }
-        // --- Data ---
-        const hotels = [
-            { name: "輕井澤王子飯店西館", date: "2/24-2/27", address: "389-0193 長野縣北佐久郡輕井澤町輕井澤1016-85", tel: "+81-(0)267-42-1113" },
-            { name: "LANDABOUT TOKYO", date: "2/27-2/28", address: "東京都, 東京, Taito-ku Negishi 3-4-5", tel: "+81-3-6802-4437" },
-            { name: "Route Inn 新莊站前", date: "2/28-3/1", address: "山形県新庄市金沢沖1109-6", tel: "050-1809-5168" },
-            { name: "The OneFive Sendai", date: "3/1-3/4", address: "4 Chome-6-28 Tsutsujigaoka, Miyagino Ward, Sendai, Miyagi 983-0852", tel: "" },
-            { name: "Route Inn Yamagataminami", date: "3/4", address: "1 Chome-1-11 Iidanishi, Yamagata, 990-2331", tel: "" },
-            { name: "The OneFive Sendai", date: "3/5", address: "4 Chome-6-28 Tsutsujigaoka, Miyagino Ward, Sendai, Miyagi 983-0852", tel: "" },
-        ];
-        const packingList = {
-            "個人物品": ["護照", "信用卡", "身分證", "現金", "身分證影本", "護照影本", "駕照", "國際駕照", "駕照譯本"],
-            "雜物": ["衣物", "帽子", "太陽眼鏡", "隱眼", "梳子", "保養品", "藥品"],
-            "電子產品": ["充電器", "充電線", "行動電源", "萬國插座", "GoPro", "電池/記憶卡", "網卡"],
-            "滑雪準備": ["雪鏡", "排汗衣", "保暖長袖", "手套", "長襪", "防滑鞋", "屁墊", "暖暖包", "護膝", "護手", "冰爪"]
-        };
-        
-        // --- Updated Food Data ---
-        const foodData = [
-             {
-                day: "Day 1: 上野午餐 Ueno Lunch",
-                spots: [
-                    { name: "蟹食放題 ごっつお", type: "午餐", address: "https://maps.app.goo.gl/Rp6dMS3VGsW6yh9K8", note: "螃蟹吃到飽" },
-                    { name: "東京炸豬排 がぶう", type: "午餐", address: "https://maps.app.goo.gl/pg8YiKhQ7DvFyB6p9", note: "黑毛和牛炸肉餅" },
-                    { name: "天婦羅 天寿ゞ", type: "午餐", address: "https://maps.app.goo.gl/1UPZHjPUsC9de1UQA", note: "創業老舖" },
-                    { name: "金沢まいもん寿司", type: "午餐", address: "https://maps.app.goo.gl/VPMDuMSszPCgQpFV6", note: "來自金澤的美味" }
-                ]
-            },
-            {
-                day: "Day 1-3: 輕井澤 Karuizawa",
-                spots: [
-                    { name: "しゃぶしゃぶ愛宕", type: "晚餐", address: "https://maps.app.goo.gl/uGzDhdyx7qHgRKyy5", tel: "0267-41-6111", note: "涮涮鍋" },
-                    { name: "アクセス (ACCESS)", type: "晚餐", address: "https://maps.app.goo.gl/sYZRLBTJ7d3M66Wd6", tel: "0267-42-3081", note: "" },
-                    { name: "村民食堂", type: "晚餐", address: "https://maps.app.goo.gl/kaefExA2mjnSSkpd8", tel: "0267-44-3571", note: "星野區日式定食" },
-                    { name: "ろぐ亭 (Log-tei)", type: "晚餐", address: "https://maps.app.goo.gl/qbN35Ey3FKH4e9YW9", tel: "0267-45-2341", note: "燒肉 / 牛排" },
-                    { name: "Fujiya", type: "晚餐", address: "https://maps.app.goo.gl/e3EARNFtAoGALaid9", note: "洋食 / 麵包" },
-                    { name: "Primo Fito", type: "晚餐", address: "https://maps.app.goo.gl/C4WtRCwJ9JHAnzLr5", note: "義式料理" }
-                ]
-            },
-            {
-                day: "Day 4: 東京上野 Ueno",
-                spots: [
-                    { name: "三浦三崎港 迴轉壽司", type: "晚餐", address: "https://maps.app.goo.gl/VJXgERqoWoxW7uAa9", note: "食材堆得像山一樣" },
-                    { name: "ぽん多本家", type: "晚餐", address: "https://maps.app.goo.gl/4W1kfAtLvaYV6bqeA", note: "炸豬排老舖" },
-                    { name: "上野兔屋 (Usagiya)", type: "甜點", address: "https://maps.app.goo.gl/3wWrCgXUDpZkRApn6", note: "銅鑼燒名店" },
-                    { name: "EGG BABY CAFÉ", type: "輕食", address: "https://maps.app.goo.gl/YGDFKHrPwm7JcBGu6", note: "半熟蛋三明治" },
-                    { name: "鳥恵 上野広小路店", type: "晚餐", address: "https://maps.app.goo.gl/DGbWb1ibo8DTaD6J7", note: "燒鳥 (串燒)" }
-                ]
-            },
-             {
-                day: "Day 5: 山形新庄 Shinjo",
-                spots: [
-                      { name: "味園 (Aji-en)", type: "晚餐", address: "https://maps.app.goo.gl/XSJPdcdrTYY7gKBY8", note: "燒肉 / 食堂" },
-                      { name: "CLAN", type: "晚餐", address: "https://maps.app.goo.gl/QQQUaDzkm2DiJMEF7", tel: "+81233321718", note: "Dining Bar" },
-                      { name: "Tea Room Pinocchio", type: "晚餐", address: "https://maps.app.goo.gl/nPSk2qRxAr8RpphK6", tel: "+81233234551", note: "喫茶店 / 洋食" },
-                      { name: "新旬屋 本店", type: "晚餐", address: "https://maps.app.goo.gl/6YV5b7cRjwYs5NXv7", tel: "+81233234634", note: "金雞拉麵 (16:30-20:30)" }
-                ]
-            },
-            {
-                day: "Day 7: 山寺 Yamadera",
-                spots: [
-                    { name: "焰藏 (山寺店)", type: "午餐", address: "https://maps.app.goo.gl/GRtQ5nHR4hgQHRYx8", note: "山形蕎麥麵" }
-                ]
-            },
-            {
-                day: "Day 8: 仙台 Sendai",
-                spots: [
-                    { name: "肉十八", type: "晚餐", address: "https://maps.app.goo.gl/Ej3BFShnWRhJDVdo6", note: "燒肉吃到飽" }
-                ]
-            },
-            {
-                day: "Day 9: 山形市區 Yamagata",
-                spots: [
-                    { name: "酒菜一", type: "晚餐", address: "https://maps.app.goo.gl/g6U6oPuYYoBGwnFH7", tel: "+815054841844", note: "居酒屋 / 鄉土料理" },
-                    { name: "山形肉問屋センター", type: "晚餐", address: "https://maps.app.goo.gl/fj9Dnprd52xy6EVK7", tel: "+817011455641", note: "燒肉 / 肉料理" },
-                    { name: "Suzuran (すずらん)", type: "晚餐", address: "https://maps.app.goo.gl/xeKVC9QcoSyXpR628", tel: "+81236422911", note: "拉麵 / 中華料理" },
-                    { name: "ISLAND PEAK", type: "酒吧", address: "https://maps.app.goo.gl/2AzN5zdezWWHFFJq8", tel: "+81236767885", note: "International Café & Bar" }
-                ]
-            }
-        ];
 
-        // --- Core Logic ---
         let currentDayIndex = 0;
         let dayPhotos = JSON.parse(localStorage.getItem('trip_day_photos')) || {};
 
@@ -527,8 +445,32 @@
             document.getElementById('globalWeather').innerHTML = `${dateStr} 東京 ⛅ 8°C`;
         }
 
-        // --- NAVIGATION ---
-       function renderDay(index) {
+        // --- NAVIGATION & RENDERING ---
+        function renderDayTabs() {
+            const container = document.getElementById('dayTabs');
+            container.innerHTML = itinerary.map((day, idx) => `
+                <div onclick="jumpToDay(${idx})" class="day-tab ${idx === 0 ? 'active' : ''}" id="tab-${idx}">
+                    D${day.day}
+                </div>
+            `).join('');
+        }
+
+        function jumpToDay(index) {
+            index = parseInt(index, 10);
+            if (isNaN(index) || index < 0) index = 0;
+            if (index >= itinerary.length) index = itinerary.length - 1;
+            
+            currentDayIndex = index;
+            renderDay(index);
+            window.scrollTo(0, 0);
+        }
+
+        function changeDayOffset(offset) {
+            jumpToDay(currentDayIndex + offset);
+        }
+
+        // ★ UPDATED RENDER DAY (WITH DELETE & ADD FORM) ★
+        function renderDay(index) {
             const day = itinerary[index];
             const container = document.getElementById('day-content');
 
@@ -550,11 +492,8 @@
 
             // Events Rendering
             let eventsHtml = '';
-            
-            // ★ 修改處 1: 加入刪除按鈕與索引值 ★
             day.events.forEach((evt, evtIdx) => {
                 if (evt.type === 'html') {
-                    // HTML 類型 (如交通方案) 也加上刪除鈕
                     eventsHtml += `
                         <div class="relative pl-8 pb-4 group">
                             <div class="timeline-dot absolute left-[22px] top-1"></div>
@@ -564,7 +503,6 @@
                 } else {
                     let borderClass = evt.highlight ? 'border-l-4 border-muji-highlight pl-2' : '';
                     let textClass = evt.highlight ? 'text-muji-highlight font-bold' : '';
-                    
                     if(evt.customColor) {
                         const colors = evt.customColor.split(' ');
                         const textC = colors.find(c => c.startsWith('text-')) || '';
@@ -572,10 +510,8 @@
                         textClass = `${textC} font-bold`;
                         borderClass = `border-l-4 ${borderC} pl-2`;
                     }
-
                     const mapBtn = evt.address ? `<button onclick="openMap('${evt.address}')" class="ml-2 text-muji-accent"><i class="fa-solid fa-location-dot"></i></button>` : '';
                     
-                    // 卡片 HTML
                     eventsHtml += `
                         <div class="relative pl-8 pb-6 last:pb-0 group">
                             <div class="timeline-dot absolute left-[22px] top-1"></div>
@@ -583,7 +519,6 @@
                             <div class="bg-white p-3 rounded-lg shadow-sm mt-1 border border-gray-100 ${borderClass} relative">
                                 <div class="font-medium text-base ${textClass} pr-6">${evt.title} ${mapBtn}</div>
                                 ${evt.note ? `<div class="text-xs text-gray-500 mt-1">${evt.note}</div>` : ''}
-                                
                                 <button onclick="deleteEvent(${index}, ${evtIdx})" class="absolute top-2 right-2 text-gray-300 hover:text-red-500 w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-50 transition-all">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
@@ -593,13 +528,12 @@
                 }
             });
 
-            // ★ 修改處 2: 在最後面加入「新增行程」表單 ★
+            // Add Event Form
             const addFormHtml = `
                 <div class="mt-6 pt-4 border-t border-dashed border-gray-300">
                     <button onclick="document.getElementById('addEventForm').classList.toggle('hidden')" class="w-full py-2 text-center text-muji-accent font-bold border border-muji-accent rounded-lg border-dashed hover:bg-muji-accent hover:text-white transition-colors">
                         + 新增行程
                     </button>
-                    
                     <div id="addEventForm" class="hidden mt-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200">
                         <div class="grid grid-cols-3 gap-2 mb-2">
                             <input type="time" id="newEvtTime" class="muji-input col-span-1 text-sm" value="12:00">
@@ -611,12 +545,10 @@
                                 <option value="activity">🏂 活動</option>
                             </select>
                         </div>
-                        <input type="text" id="newEvtTitle" class="muji-input mb-2" placeholder="行程標題 (e.g. 吃拉麵)">
-                        <input type="text" id="newEvtNote" class="muji-input mb-3" placeholder="備註 (e.g. 記得訂位)">
+                        <input type="text" id="newEvtTitle" class="muji-input mb-2" placeholder="行程標題">
+                        <input type="text" id="newEvtNote" class="muji-input mb-3" placeholder="備註">
                         <div class="flex justify-between">
-                            <label class="flex items-center text-sm text-gray-500">
-                                <input type="checkbox" id="newEvtHighlight" class="mr-2"> 重點標記
-                            </label>
+                            <label class="flex items-center text-sm text-gray-500"><input type="checkbox" id="newEvtHighlight" class="mr-2"> 重點</label>
                             <button onclick="addNewEvent(${index})" class="muji-btn text-sm">確認新增</button>
                         </div>
                     </div>
@@ -655,104 +587,40 @@
             container.animate([{ opacity: 0, transform: 'translateY(5px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 250, easing: 'ease-out' });
         }
 
-        function jumpToDay(index) {
-            index = parseInt(index, 10);
-            if (isNaN(index) || index < 0) index = 0;
-            if (index >= itinerary.length) index = itinerary.length - 1;
+        // Add & Delete Event Functions
+        function addNewEvent(dayIndex) {
+            const time = document.getElementById('newEvtTime').value;
+            const title = document.getElementById('newEvtTitle').value;
+            const type = document.getElementById('newEvtType').value;
+            const note = document.getElementById('newEvtNote').value;
+            const highlight = document.getElementById('newEvtHighlight').checked;
+
+            if (!title) return alert('請輸入標題');
+
+            const newEvent = { time, title, type, note, highlight };
+            itinerary[dayIndex].events.push(newEvent);
             
-            currentDayIndex = index;
-            renderDay(index);
-            window.scrollTo(0, 0);
-        }
-
-        function changeDayOffset(offset) {
-            jumpToDay(currentDayIndex + offset);
-        }
-
-        function renderDay(index) {
-            const day = itinerary[index];
-            const container = document.getElementById('day-content');
-
-            // Tabs Styling
-            document.querySelectorAll('.day-tab').forEach((el, idx) => {
-                if(idx === index) {
-                    el.classList.add('active');
-                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                } else {
-                    el.classList.remove('active');
+            // Sort events by time
+            itinerary[dayIndex].events.sort((a, b) => {
+                if (a.time === 'All Day') return -1;
+                if (b.time === 'All Day') return 1;
+                if (a.time && b.time && a.time.includes(':') && b.time.includes(':')) {
+                    return a.time.localeCompare(b.time);
                 }
+                return 0;
             });
 
-            // Buttons
-            document.getElementById('btnPrev').disabled = (index === 0);
-            document.getElementById('btnPrev').style.opacity = (index === 0) ? '0.3' : '1';
-            document.getElementById('btnNext').disabled = (index === itinerary.length - 1);
-            document.getElementById('btnNext').style.opacity = (index === itinerary.length - 1) ? '0.3' : '1';
-
-            // Events
-            let eventsHtml = '';
-            day.events.forEach(evt => {
-                if (evt.type === 'html') {
-                    eventsHtml += `<div class="relative pl-8 pb-4"><div class="timeline-dot absolute left-[22px] top-1"></div>${evt.content}</div>`;
-                } else {
-                    // Check for custom colors
-                    let borderClass = evt.highlight ? 'border-l-4 border-muji-highlight pl-2' : '';
-                    let textClass = evt.highlight ? 'text-muji-highlight font-bold' : '';
-                    
-                    if(evt.customColor) {
-                        const colors = evt.customColor.split(' ');
-                        const textC = colors.find(c => c.startsWith('text-')) || '';
-                        const borderC = colors.find(c => c.startsWith('border-')) || '';
-                        textClass = `${textC} font-bold`;
-                        borderClass = `border-l-4 ${borderC} pl-2`;
-                    }
-
-                    const mapBtn = evt.address ? `<button onclick="openMap('${evt.address}')" class="ml-2 text-muji-accent"><i class="fa-solid fa-location-dot"></i></button>` : '';
-                    eventsHtml += `
-                        <div class="relative pl-8 pb-6 last:pb-0">
-                            <div class="timeline-dot absolute left-[22px] top-1"></div>
-                            <div class="text-sm font-bold text-muji-accent">${evt.time}</div>
-                            <div class="bg-white p-3 rounded-lg shadow-sm mt-1 border border-gray-100 ${borderClass}">
-                                <div class="font-medium text-base ${textClass}">${evt.title} ${mapBtn}</div>
-                                ${evt.note ? `<div class="text-xs text-gray-500 mt-1">${evt.note}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-
-            const weatherHtml = `
-                <div class="weather-badge mb-2 shadow-sm border border-gray-100">
-                    <i class="fa-solid ${day.weather.icon} mr-2 text-blue-500"></i> ${day.weather.text}
-                    <button onclick="openWeather('${day.weather.link}')" class="ml-2 text-gray-400 hover:text-blue-600 border-l pl-2 border-gray-300"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                </div>
-            `;
-
-            container.innerHTML = `
-                <div class="animate-fade-in">
-                    <div class="relative mb-8">
-                        <div class="timeline-line"></div>
-                        <div class="mb-4 bg-muji-bg z-20 pt-2">
-                            <div class="flex justify-between items-end">
-                                <h3 class="font-bold text-2xl text-muji-text">${day.date}</h3>
-                                ${weatherHtml}
-                            </div>
-                            <div class="text-sm text-gray-500 flex items-center gap-2 mb-1">
-                                <i class="fa-solid ${day.icon}"></i> ${day.title}
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            ${eventsHtml}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            renderDayPhotos(index);
-            container.animate([{ opacity: 0, transform: 'translateY(5px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 250, easing: 'ease-out' });
+            saveItinerary();
         }
 
-        // --- DAY PHOTO LOGIC ---
+        function deleteEvent(dayIndex, evtIndex) {
+            if (confirm('確定要刪除這個行程嗎？')) {
+                itinerary[dayIndex].events.splice(evtIndex, 1);
+                saveItinerary();
+            }
+        }
+
+        // --- 3. PHOTO LOGIC ---
         function handleAddDayPhotos(input) {
             if (input.files) {
                 const files = Array.from(input.files);
@@ -810,25 +678,7 @@
             }
         }
 
-        // --- Helpers ---
-        function navTo(pageId) {
-            document.querySelectorAll('.page-container').forEach(el => el.classList.remove('active'));
-            document.getElementById(`page-${pageId}`).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(el => { el.classList.remove('text-muji-accent'); el.classList.add('text-muji-secondary'); });
-            event.currentTarget.classList.remove('text-muji-secondary'); event.currentTarget.classList.add('text-muji-accent');
-            window.scrollTo(0,0);
-        }
-        function openMap(address) { 
-            if(!address) return; 
-            if(address.startsWith('http')) {
-                window.open(address, '_blank');
-            } else {
-                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank'); 
-            }
-        }
-        function openWeather(loc) { window.open(`https://www.google.com/search?q=weather+${loc}+japan`, '_blank'); }
-        
-        // --- COVER & ICON LOGIC ---
+        // --- 4. COVER PHOTO (FIXED) ---
         function loadCover() { 
             const s = localStorage.getItem('trip_cover'); 
             if(s) {
@@ -858,24 +708,11 @@
                     }
                 }; 
                 r.readAsDataURL(input.files[0]); 
+                input.value = ''; // FIXED: Allow re-selection
             }
         }
 
-        // --- Wallet Logic ---
-        let rate = localStorage.getItem('trip_rate') || 0.22;
-        let expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
-        function initWallet() { document.getElementById('displayRate').innerText = rate; document.getElementById('calcInput').addEventListener('input', calculate); renderExpenses(); }
-        function toggleRateEdit() { document.getElementById('rateEditor').classList.toggle('hidden'); }
-        function updateRate() { const val = parseFloat(document.getElementById('customRate').value); if(val) { rate = val; localStorage.setItem('trip_rate', rate); document.getElementById('displayRate').innerText = rate; calculate(); renderExpenses(); toggleRateEdit(); } }
-        function calculate() { const input = document.getElementById('calcInput').value; try { if(input.match(/^[0-9+\-*/.() ]+$/)) { const jpy = new Function('return ' + input)(); document.getElementById('twdResult').innerText = Math.round(jpy * rate).toLocaleString(); } } catch(e) {} }
-        let currentExpenseImg = null;
-        function handleImagePreview(input) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = function (e) { const img = new Image(); img.src = e.target.result; img.onload = function() { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 400/img.width; c.width = 400; c.height = img.height * s; ctx.drawImage(img, 0, 0, c.width, c.height); currentExpenseImg = c.toDataURL('image/jpeg', 0.6); document.getElementById('imgPreviewArea').style.backgroundImage = `url(${currentExpenseImg})`; document.getElementById('imgPreviewArea').classList.remove('hidden'); }}; r.readAsDataURL(input.files[0]); }}
-        function addExpense() { const item = document.getElementById('expenseItem').value; const price = parseFloat(document.getElementById('expensePrice').value); if(!item || !price) return alert('請輸入項目與金額'); expenses.unshift({ id: Date.now(), item, price, img: currentExpenseImg, date: new Date().toLocaleDateString() }); localStorage.setItem('trip_expenses', JSON.stringify(expenses)); document.getElementById('expenseItem').value = ''; document.getElementById('expensePrice').value = ''; document.getElementById('imgPreviewArea').classList.add('hidden'); currentExpenseImg = null; renderExpenses(); }
-        function deleteExpense(id) { if(confirm('確定刪除?')) { expenses = expenses.filter(e => e.id !== id); localStorage.setItem('trip_expenses', JSON.stringify(expenses)); renderExpenses(); } }
-        function renderExpenses() { const list = document.getElementById('expenseList'); list.innerHTML = expenses.map(e => `<div class="bg-white p-3 rounded-lg shadow-sm flex justify-between items-center border border-gray-100"><div class="flex items-center gap-3">${e.img ? `<div onclick="showFullImg('${e.img}')" class="w-10 h-10 bg-cover bg-center rounded bg-gray-200 flex-shrink-0" style="background-image:url(${e.img})"></div>` : `<div class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400"><i class="fa-solid fa-yen-sign"></i></div>`}<div><div class="font-bold text-sm">${e.item}</div><div class="text-xs text-gray-400">${e.date}</div></div></div><div class="text-right"><div class="font-bold">¥${e.price}</div><div class="text-xs text-gray-400">NT$${Math.round(e.price * rate)}</div><button onclick="deleteExpense(${e.id})" class="text-gray-300 text-xs mt-1"><i class="fa-solid fa-trash"></i></button></div></div>`).join(''); }
-        function showFullImg(src) { const w = window.open(""); w.document.write(`<img src="${src}" style="width:100%">`); }
-
-        // --- Lists Logic (Updated with Image Support) ---
+        // --- 5. SHOPPING LIST (GRID LAYOUT) ---
         let userChecklist = JSON.parse(localStorage.getItem('trip_checklist')) || {};
         let memoList = JSON.parse(localStorage.getItem('trip_memos')) || [];
         let shopList = JSON.parse(localStorage.getItem('trip_shop')) || [];
@@ -893,18 +730,7 @@
             document.querySelectorAll('.list-content').forEach(d => d.classList.add('hidden')); 
             document.getElementById(`list-${tab}`).classList.remove('hidden'); 
         }
-        
-        function renderPacking() { let html = ''; for (const [category, items] of Object.entries(packingList)) { html += `<div class="mb-4"><h3 class="font-bold text-muji-accent mb-2">${category}</h3><div class="space-y-2">` + items.map(item => `<label class="flex items-center bg-white p-3 rounded shadow-sm border border-gray-100"><input type="checkbox" class="w-5 h-5 accent-teal-700 mr-3" ${userChecklist[item] ? 'checked' : ''} onchange="toggleCheck('${item}')"><span class="${userChecklist[item] ? 'line-through text-gray-400' : ''}">${item}</span></label>`).join('') + `</div></div>`; } document.getElementById('list-packing').innerHTML = html; }
-        
-        function toggleCheck(item) { userChecklist[item] = !userChecklist[item]; localStorage.setItem('trip_checklist', JSON.stringify(userChecklist)); renderPacking(); }
-        
-        function saveMemo() { const txt = document.getElementById('memoInput').value; if(txt) { memoList.push({ id: Date.now(), text: txt }); localStorage.setItem('trip_memos', JSON.stringify(memoList)); document.getElementById('memoInput').value = ''; renderMemo(); } }
-        
-        function renderMemo() { document.getElementById('memoContainer').innerHTML = memoList.map(m => `<div class="bg-yellow-50 p-3 rounded shadow-sm border border-yellow-100 text-sm relative"><button onclick="deleteMemo(${m.id})" class="absolute top-1 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button><div class="whitespace-pre-wrap pr-4">${m.text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>')}</div></div>`).join(''); }
-        
-        function deleteMemo(id) { memoList = memoList.filter(m => m.id !== id); localStorage.setItem('trip_memos', JSON.stringify(memoList)); renderMemo(); }
 
-        // Shop Logic
         function handleShopImagePreview(input) {
             if (input.files && input.files[0]) {
                 const r = new FileReader();
@@ -975,33 +801,23 @@
 
         function renderShop() {
             const container = document.getElementById('shopContainer');
-            
-            // ★ 修改容器樣式：變成 3 欄的網格 (Grid) ★
-            container.className = 'grid grid-cols-3 gap-2 pb-20'; 
-
             if (shopList.length === 0) {
                 container.innerHTML = '<div class="col-span-3 text-center text-gray-300 text-sm py-8">暫無購買清單<br>點擊上方新增</div>';
                 return;
             }
 
             container.innerHTML = shopList.map(item => {
-                // 1. 處理圖片顯示 (有圖顯示圖，沒圖顯示圖示)
                 let imgContent = '';
                 if (item.img) {
                     imgContent = `<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url(${item.img})"></div>`;
                 } else {
                     imgContent = `<div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300"><i class="fa-solid fa-gift text-2xl"></i></div>`;
                 }
-
-                // 2. 處理「已購」遮罩
                 const boughtOverlay = item.bought 
                     ? `<div class="absolute inset-0 bg-emerald-600/60 backdrop-blur-[1px] flex items-center justify-center z-10 animate-fade-in"><span class="text-white font-bold text-sm tracking-widest border-2 border-white px-2 py-1 rounded">已購</span></div>`
                     : '';
-
-                // 3. 處理文字/連結內容
                 let textContent = '';
-                let textAction = ''; // 點擊文字的動作
-                
+                let textAction = '';
                 if (item.type === 'link') {
                     const url = item.text.match(/(https?:\/\/[^\s]+)/)[0];
                     textContent = `<span class="text-blue-600 underline truncate block"><i class="fa-solid fa-link text-[10px] mr-1"></i>${item.meta}</span>`;
@@ -1010,14 +826,11 @@
                     textContent = `<span class="truncate block text-gray-600">${item.text}</span>`;
                 }
 
-                // 4. 組合卡片 HTML
                 return `
                     <div class="relative group bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm flex flex-col aspect-[3/4]">
-                        
                         <button onclick="deleteShopItem(${item.id})" class="absolute top-1 right-1 z-20 bg-white/80 hover:bg-red-500 hover:text-white text-gray-400 rounded-full w-6 h-6 flex items-center justify-center shadow-sm transition-colors">
                             <i class="fa-solid fa-xmark text-xs"></i>
                         </button>
-
                         <div onclick="toggleShop(${item.id})" class="relative flex-1 cursor-pointer overflow-hidden border-b border-gray-100">
                             ${imgContent}
                             ${boughtOverlay}
@@ -1025,7 +838,6 @@
                                 <i class="fa-regular fa-circle-check"></i>
                             </div>
                         </div>
-
                         <div ${textAction} class="p-2 h-10 flex items-center bg-white text-[11px] font-medium leading-tight cursor-pointer hover:bg-gray-50">
                             ${textContent}
                         </div>
@@ -1033,37 +845,76 @@
                 `;
             }).join('');
         }
-        
-        // --- Info & Food Logic (UPDATED FOR TABS) ---
+
+        // --- 6. OTHER LISTS (PACKING & MEMO) ---
+        const packingList = {
+            "個人物品": ["護照", "信用卡", "身分證", "現金", "身分證影本", "護照影本", "駕照", "國際駕照", "駕照譯本"],
+            "雜物": ["衣物", "帽子", "太陽眼鏡", "隱眼", "梳子", "保養品", "藥品"],
+            "電子產品": ["充電器", "充電線", "行動電源", "萬國插座", "GoPro", "電池/記憶卡", "網卡"],
+            "滑雪準備": ["雪鏡", "排汗衣", "保暖長袖", "手套", "長襪", "防滑鞋", "屁墊", "暖暖包", "護膝", "護手", "冰爪"]
+        };
+        function renderPacking() { let html = ''; for (const [category, items] of Object.entries(packingList)) { html += `<div class="mb-4"><h3 class="font-bold text-muji-accent mb-2">${category}</h3><div class="space-y-2">` + items.map(item => `<label class="flex items-center bg-white p-3 rounded shadow-sm border border-gray-100"><input type="checkbox" class="w-5 h-5 accent-teal-700 mr-3" ${userChecklist[item] ? 'checked' : ''} onchange="toggleCheck('${item}')"><span class="${userChecklist[item] ? 'line-through text-gray-400' : ''}">${item}</span></label>`).join('') + `</div></div>`; } document.getElementById('list-packing').innerHTML = html; }
+        function toggleCheck(item) { userChecklist[item] = !userChecklist[item]; localStorage.setItem('trip_checklist', JSON.stringify(userChecklist)); renderPacking(); }
+        function saveMemo() { const txt = document.getElementById('memoInput').value; if(txt) { memoList.push({ id: Date.now(), text: txt }); localStorage.setItem('trip_memos', JSON.stringify(memoList)); document.getElementById('memoInput').value = ''; renderMemo(); } }
+        function renderMemo() { document.getElementById('memoContainer').innerHTML = memoList.map(m => `<div class="bg-yellow-50 p-3 rounded shadow-sm border border-yellow-100 text-sm relative"><button onclick="deleteMemo(${m.id})" class="absolute top-1 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button><div class="whitespace-pre-wrap pr-4">${m.text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>')}</div></div>`).join(''); }
+        function deleteMemo(id) { memoList = memoList.filter(m => m.id !== id); localStorage.setItem('trip_memos', JSON.stringify(memoList)); renderMemo(); }
+
+        // --- 7. WALLET & INFO ---
+        let rate = localStorage.getItem('trip_rate') || 0.22;
+        let expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
+        function initWallet() { document.getElementById('displayRate').innerText = rate; document.getElementById('calcInput').addEventListener('input', calculate); renderExpenses(); }
+        function toggleRateEdit() { document.getElementById('rateEditor').classList.toggle('hidden'); }
+        function updateRate() { const val = parseFloat(document.getElementById('customRate').value); if(val) { rate = val; localStorage.setItem('trip_rate', rate); document.getElementById('displayRate').innerText = rate; calculate(); renderExpenses(); toggleRateEdit(); } }
+        function calculate() { const input = document.getElementById('calcInput').value; try { if(input.match(/^[0-9+\-*/.() ]+$/)) { const jpy = new Function('return ' + input)(); document.getElementById('twdResult').innerText = Math.round(jpy * rate).toLocaleString(); } } catch(e) {} }
+        let currentExpenseImg = null;
+        function handleImagePreview(input) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = function (e) { const img = new Image(); img.src = e.target.result; img.onload = function() { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 400/img.width; c.width = 400; c.height = img.height * s; ctx.drawImage(img, 0, 0, c.width, c.height); currentExpenseImg = c.toDataURL('image/jpeg', 0.6); document.getElementById('imgPreviewArea').style.backgroundImage = `url(${currentExpenseImg})`; document.getElementById('imgPreviewArea').classList.remove('hidden'); }}; r.readAsDataURL(input.files[0]); }}
+        function addExpense() { const item = document.getElementById('expenseItem').value; const price = parseFloat(document.getElementById('expensePrice').value); if(!item || !price) return alert('請輸入項目與金額'); expenses.unshift({ id: Date.now(), item, price, img: currentExpenseImg, date: new Date().toLocaleDateString() }); localStorage.setItem('trip_expenses', JSON.stringify(expenses)); document.getElementById('expenseItem').value = ''; document.getElementById('expensePrice').value = ''; document.getElementById('imgPreviewArea').classList.add('hidden'); currentExpenseImg = null; renderExpenses(); }
+        function deleteExpense(id) { if(confirm('確定刪除?')) { expenses = expenses.filter(e => e.id !== id); localStorage.setItem('trip_expenses', JSON.stringify(expenses)); renderExpenses(); } }
+        function renderExpenses() { const list = document.getElementById('expenseList'); list.innerHTML = expenses.map(e => `<div class="bg-white p-3 rounded-lg shadow-sm flex justify-between items-center border border-gray-100"><div class="flex items-center gap-3">${e.img ? `<div onclick="showFullImg('${e.img}')" class="w-10 h-10 bg-cover bg-center rounded bg-gray-200 flex-shrink-0" style="background-image:url(${e.img})"></div>` : `<div class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400"><i class="fa-solid fa-yen-sign"></i></div>`}<div><div class="font-bold text-sm">${e.item}</div><div class="text-xs text-gray-400">${e.date}</div></div></div><div class="text-right"><div class="font-bold">¥${e.price}</div><div class="text-xs text-gray-400">NT$${Math.round(e.price * rate)}</div><button onclick="deleteExpense(${e.id})" class="text-gray-300 text-xs mt-1"><i class="fa-solid fa-trash"></i></button></div></div>`).join(''); }
+
         let qrCodes = JSON.parse(localStorage.getItem('trip_qrcodes')) || [];
+        const hotels = [
+            { name: "輕井澤王子飯店西館", date: "2/24-2/27", address: "389-0193 長野縣北佐久郡輕井澤町輕井澤1016-85", tel: "+81-(0)267-42-1113" },
+            { name: "LANDABOUT TOKYO", date: "2/27-2/28", address: "東京都, 東京, Taito-ku Negishi 3-4-5", tel: "+81-3-6802-4437" },
+            { name: "Route Inn 新莊站前", date: "2/28-3/1", address: "山形県新庄市金沢沖1109-6", tel: "050-1809-5168" },
+            { name: "The OneFive Sendai", date: "3/1-3/4", address: "4 Chome-6-28 Tsutsujigaoka, Miyagino Ward, Sendai, Miyagi 983-0852", tel: "" },
+            { name: "Route Inn Yamagataminami", date: "3/4", address: "1 Chome-1-11 Iidanishi, Yamagata, 990-2331", tel: "" },
+            { name: "The OneFive Sendai", date: "3/5", address: "4 Chome-6-28 Tsutsujigaoka, Miyagino Ward, Sendai, Miyagi 983-0852", tel: "" },
+        ];
         function initInfo() { renderHotels(); renderQRs(); }
         function renderHotels() { document.getElementById('hotelInfo').innerHTML = hotels.map(h => `<div class="pb-2 border-b border-gray-100 last:border-0"><div class="text-xs font-bold bg-gray-200 inline-block px-1 rounded text-gray-600 mb-1">${h.date}</div><div class="font-bold text-base text-muji-accent">${h.name}</div><div class="text-xs text-gray-500 mt-1">${h.address}</div><div class="flex gap-3 mt-2"><button onclick="openMap('${h.address}')" class="text-blue-500 text-xs underline">地圖</button>${h.tel ? `<a href="tel:${h.tel}" class="text-blue-500 text-xs underline">撥打電話</a>` : ''}</div></div>`).join(''); }
         function toggleAccordion(id) { document.getElementById(id).classList.toggle('hidden'); }
         function addQRCode(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function (e) { qrCodes.push(e.target.result); localStorage.setItem('trip_qrcodes', JSON.stringify(qrCodes)); renderQRs(); }; reader.readAsDataURL(input.files[0]); } }
         function renderQRs() { document.getElementById('qrContainer').innerHTML = qrCodes.map((src, idx) => `<div class="relative group"><img src="${src}" class="w-full rounded border border-gray-200" onclick="showFullImg('${src}')"><button onclick="deleteQR(${idx})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-80"><i class="fa-solid fa-xmark"></i></button></div>`).join(''); }
         function deleteQR(idx) { if(confirm('刪除?')) { qrCodes.splice(idx, 1); localStorage.setItem('trip_qrcodes', JSON.stringify(qrCodes)); renderQRs(); } }
-        
-        // --- NEW FOOD LOGIC WITH TABS ---
+
+        // --- 8. FOOD GUIDE ---
+        const foodData = [
+             { day: "Day 1: 上野午餐 Ueno Lunch", spots: [ { name: "蟹食放題 ごっつお", type: "午餐", address: "https://maps.app.goo.gl/Rp6dMS3VGsW6yh9K8", note: "螃蟹吃到飽" }, { name: "東京炸豬排 がぶう", type: "午餐", address: "https://maps.app.goo.gl/pg8YiKhQ7DvFyB6p9", note: "黑毛和牛炸肉餅" }, { name: "天婦羅 天寿ゞ", type: "午餐", address: "https://maps.app.goo.gl/1UPZHjPUsC9de1UQA", note: "創業老舖" }, { name: "金沢まいもん寿司", type: "午餐", address: "https://maps.app.goo.gl/VPMDuMSszPCgQpFV6", note: "來自金澤的美味" } ] },
+             { day: "Day 1-3: 輕井澤 Karuizawa", spots: [ { name: "しゃぶしゃぶ愛宕", type: "晚餐", address: "https://maps.app.goo.gl/uGzDhdyx7qHgRKyy5", tel: "0267-41-6111", note: "涮涮鍋" }, { name: "アクセス (ACCESS)", type: "晚餐", address: "https://maps.app.goo.gl/sYZRLBTJ7d3M66Wd6", tel: "0267-42-3081", note: "" }, { name: "村民食堂", type: "晚餐", address: "https://maps.app.goo.gl/kaefExA2mjnSSkpd8", tel: "0267-44-3571", note: "星野區日式定食" }, { name: "ろぐ亭 (Log-tei)", type: "晚餐", address: "https://maps.app.goo.gl/qbN35Ey3FKH4e9YW9", tel: "0267-45-2341", note: "燒肉 / 牛排" }, { name: "Fujiya", type: "晚餐", address: "https://maps.app.goo.gl/e3EARNFtAoGALaid9", note: "洋食 / 麵包" }, { name: "Primo Fito", type: "晚餐", address: "https://maps.app.goo.gl/C4WtRCwJ9JHAnzLr5", note: "義式料理" } ] },
+             { day: "Day 4: 東京上野 Ueno", spots: [ { name: "三浦三崎港 迴轉壽司", type: "晚餐", address: "https://maps.app.goo.gl/VJXgERqoWoxW7uAa9", note: "食材堆得像山一樣" }, { name: "ぽん多本家", type: "晚餐", address: "https://maps.app.goo.gl/4W1kfAtLvaYV6bqeA", note: "炸豬排老舖" }, { name: "上野兔屋 (Usagiya)", type: "甜點", address: "https://maps.app.goo.gl/3wWrCgXUDpZkRApn6", note: "銅鑼燒名店" }, { name: "EGG BABY CAFÉ", type: "輕食", address: "https://maps.app.goo.gl/YGDFKHrPwm7JcBGu6", note: "半熟蛋三明治" }, { name: "鳥恵 上野広小路店", type: "晚餐", address: "https://maps.app.goo.gl/DGbWb1ibo8DTaD6J7", note: "燒鳥 (串燒)" } ] },
+             { day: "Day 5: 山形新庄 Shinjo", spots: [ { name: "味園 (Aji-en)", type: "晚餐", address: "https://maps.app.goo.gl/XSJPdcdrTYY7gKBY8", note: "燒肉 / 食堂" }, { name: "CLAN", type: "晚餐", address: "https://maps.app.goo.gl/QQQUaDzkm2DiJMEF7", tel: "+81233321718", note: "Dining Bar" }, { name: "Tea Room Pinocchio", type: "晚餐", address: "https://maps.app.goo.gl/nPSk2qRxAr8RpphK6", tel: "+81233234551", note: "喫茶店 / 洋食" }, { name: "新旬屋 本店", type: "晚餐", address: "https://maps.app.goo.gl/6YV5b7cRjwYs5NXv7", tel: "+81233234634", note: "金雞拉麵 (16:30-20:30)" } ] },
+             { day: "Day 7: 山寺 Yamadera", spots: [ { name: "焰藏 (山寺店)", type: "午餐", address: "https://maps.app.goo.gl/GRtQ5nHR4hgQHRYx8", note: "山形蕎麥麵" } ] },
+             { day: "Day 8: 仙台 Sendai", spots: [ { name: "肉十八", type: "晚餐", address: "https://maps.app.goo.gl/Ej3BFShnWRhJDVdo6", note: "燒肉吃到飽" } ] },
+             { day: "Day 9: 山形市區 Yamagata", spots: [ { name: "酒菜一", type: "晚餐", address: "https://maps.app.goo.gl/g6U6oPuYYoBGwnFH7", tel: "+815054841844", note: "居酒屋 / 鄉土料理" }, { name: "山形肉問屋センター", type: "晚餐", address: "https://maps.app.goo.gl/fj9Dnprd52xy6EVK7", tel: "+817011455641", note: "燒肉 / 肉料理" }, { name: "Suzuran (すずらん)", type: "晚餐", address: "https://maps.app.goo.gl/xeKVC9QcoSyXpR628", tel: "+81236422911", note: "拉麵 / 中華料理" }, { name: "ISLAND PEAK", type: "酒吧", address: "https://maps.app.goo.gl/2AzN5zdezWWHFFJq8", tel: "+81236767885", note: "International Café & Bar" } ] }
+        ];
+
         function initFood() {
             const tabContainer = document.getElementById('food-day-tabs');
             const listContainer = document.getElementById('food-list');
             let tabsHtml = '';
             let listHtml = '';
-
             foodData.forEach((section, index) => {
                 let shortTitle = section.day.split(':')[0]; 
                 if(shortTitle.length > 8) shortTitle = 'D' + shortTitle.replace('Day ', '');
                 tabsHtml += `<button onclick="scrollToFoodSection(${index})" class="food-tab-btn px-4 py-2 rounded-full text-sm font-bold border border-muji-border bg-white text-gray-500 whitespace-nowrap transition-colors flex-shrink-0" id="food-btn-${index}">${shortTitle}</button>`;
-                listHtml += `<div id="food-section-${index}" class="scroll-mt-custom">
-                    <h3 class="font-bold text-lg mb-3 border-b border-gray-200 pb-1 text-muji-accent sticky top-36 bg-muji-bg py-2 z-10 opacity-95">${section.day}</h3>
-                    <div class="space-y-4">`;
+                listHtml += `<div id="food-section-${index}" class="scroll-mt-custom"><h3 class="font-bold text-lg mb-3 border-b border-gray-200 pb-1 text-muji-accent sticky top-36 bg-muji-bg py-2 z-10 opacity-95">${section.day}</h3><div class="space-y-4">`;
                 section.spots.forEach(spot => {
                       let addrDisplay = spot.address.startsWith('http') ? '<span class="text-blue-500 underline">📍 點擊開啟地圖</span>' : `<i class="fa-solid fa-map-pin mr-1"></i> ${spot.address}`;
                       listHtml += `<div class="muji-card p-0 flex flex-col"><div class="p-4"><div class="flex justify-between items-start"><div><span class="text-xs font-bold bg-orange-100 text-orange-600 px-2 py-0.5 rounded">${spot.type}</span><h4 class="font-bold text-lg mt-1">${spot.name}</h4></div><button onclick="openMap('${spot.address}')" class="bg-blue-50 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-location-arrow text-sm"></i></button></div><p class="text-sm text-gray-500 mt-2 cursor-pointer" onclick="openMap('${spot.address}')">${addrDisplay}</p>${spot.tel ? `<p class="text-sm text-gray-500"><i class="fa-solid fa-phone mr-1"></i> ${spot.tel}</p>` : ''}${spot.note ? `<div class="mt-3 text-sm bg-gray-50 p-2 rounded text-gray-600">"${spot.note}"</div>` : ''}</div></div>`;
                 });
                 listHtml += `</div></div>`;
             });
-
             tabContainer.innerHTML = tabsHtml;
             listContainer.innerHTML = listHtml;
             updateFoodTabs(0);
@@ -1086,48 +937,21 @@
                 }
             });
         }
-        // --- 新增行程邏輯 ---
-        function addNewEvent(dayIndex) {
-            const time = document.getElementById('newEvtTime').value;
-            const title = document.getElementById('newEvtTitle').value;
-            const type = document.getElementById('newEvtType').value;
-            const note = document.getElementById('newEvtNote').value;
-            const highlight = document.getElementById('newEvtHighlight').checked;
 
-            if (!title) return alert('請輸入標題');
-
-            const newEvent = {
-                time: time,
-                title: title,
-                type: type,
-                note: note,
-                highlight: highlight
-            };
-
-            // 加入陣列
-            itinerary[dayIndex].events.push(newEvent);
-
-            // 自動依照時間排序 (讓行程表保持順序)
-            itinerary[dayIndex].events.sort((a, b) => {
-                // 如果是 HTML 區塊或是 "All Day"，保持在原位或最上面，這裡簡單處理：僅比較標準時間格式
-                if (a.time === 'All Day') return -1;
-                if (b.time === 'All Day') return 1;
-                if (a.time && b.time && a.time.includes(':') && b.time.includes(':')) {
-                    return a.time.localeCompare(b.time);
-                }
-                return 0;
-            });
-
-            saveItinerary(); // 存檔並重繪
+        // Common
+        function navTo(pageId) {
+            document.querySelectorAll('.page-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(el => { el.classList.remove('text-muji-accent'); el.classList.add('text-muji-secondary'); });
+            event.currentTarget.classList.remove('text-muji-secondary'); event.currentTarget.classList.add('text-muji-accent');
+            window.scrollTo(0,0);
         }
-
-        // --- 刪除行程邏輯 ---
-        function deleteEvent(dayIndex, evtIndex) {
-            if (confirm('確定要刪除這個行程嗎？')) {
-                itinerary[dayIndex].events.splice(evtIndex, 1);
-                saveItinerary(); // 存檔並重繪
-            }
+        function openMap(address) { 
+            if(!address) return; 
+            if(address.startsWith('http')) { window.open(address, '_blank'); } else { window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank'); }
         }
+        function openWeather(loc) { window.open(`https://www.google.com/search?q=weather+${loc}+japan`, '_blank'); }
+        function showFullImg(src) { const w = window.open(""); w.document.write(`<img src="${src}" style="width:100%">`); }
     </script>
 </body>
 </html>
