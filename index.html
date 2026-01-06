@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>滑雪不跌倒</title>
+    <title>滑雪不跌倒 v2</title>
     
     <link rel="apple-touch-icon" id="appIcon" href="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80">
     <link rel="shortcut icon" id="favIcon" href="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80">
@@ -364,6 +364,12 @@
             <h2 class="text-2xl font-bold mb-4 text-muji-text">Info & Docs</h2>
             <div class="space-y-4">
                 <div class="muji-card p-4">
+                    <h3 class="font-bold mb-2 flex items-center"><i class="fa-solid fa-rotate-right mr-2 text-muji-accent"></i> 數據管理</h3>
+                     <p class="text-xs text-gray-500 mb-2">如果行程顯示未更新，請嘗試重置。</p>
+                    <button onclick="resetDefaultItinerary()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded text-sm hover:bg-gray-300">⚠️ 重置為預設行程</button>
+                </div>
+
+                <div class="muji-card p-4">
                     <h3 class="font-bold mb-2 flex items-center"><i class="fa-solid fa-qrcode mr-2 text-muji-accent"></i> 入境 QR Code</h3>
                     <div class="grid grid-cols-2 gap-4" id="qrContainer"></div>
                     <label class="mt-3 block text-center border-2 border-dashed border-gray-300 rounded-lg p-2 cursor-pointer hover:bg-gray-50">
@@ -409,6 +415,9 @@
     </div>
 
     <script>
+        // --- VERSION CONTROL (NEW) ---
+        const DATA_VERSION = "20250224_v2"; // Increment this to force update itinerary
+
         // --- 1. DEFAULT ITINERARY DATA ---
         const defaultItinerary = [
             { day: 1, date: "2/24 (二)", title: "抵達 & 移動輕井澤", icon: "fa-plane", weather: { text: "東京 晴 5~11°C", icon: "fa-sun", link: "Tokyo" }, events: [{ time: "06:40", title: "酷航 TR898 出發", note: "第一航廈", type: "flight" }, { time: "10:45", title: "抵達成田機場", type: "flight" }, { time: "11:13~", title: "搭車前往上野", note: "車程50分", type: "train" }, { time: "12:00", title: "上野午餐", type: "food" }, { time: "15:10", title: "新幹線 -> 輕井澤", note: "上野出發", type: "train", highlight: true }, { time: "16:30", title: "租雪具", address: "4-8 KARUIZAWAHIGASHI", type: "activity" }, { time: "18:00", title: "晚餐", type: "food" }] },
@@ -424,32 +433,60 @@
                     { time: "14:00", title: "本隊: 新幹線 -> 新庄", type: "train", highlight: true }
                 ] 
             },
-          {   day: 6, date: "3/1 (日)",  title: "最上川遊船 -> 仙台",  icon: "fa-ship",  weather: { text: "山形 陰雨 2~7°C", icon: "fa-cloud-rain", link: "Yamagata" },  events: [ { time: "08:10", title: "JR陸羽西線 -> 古口", note: "08:50抵達", type: "train" }, { time: "09:00", title: "最上川遊船", type: "activity", highlight: true },  { type: "html", content: `<div class="mt-2 text-sm bg-white p-3 rounded-lg border border-gray-200"><h4 class="font-bold text-muji-accent mb-2"><i class="fa-solid fa-train"></i> 移動時刻表</h4><div class="mb-3"><span class="font-bold text-gray-600 border-b-2 border-gray-200">Local: 古口/高屋 ⮕ 新庄</span><table class="schedule-table"><tr><th>路線</th><th>出發</th><th>抵達</th></tr><tr><td>高屋⮕新庄</td><td>12:05</td><td>12:54</td></tr><tr><td>古口⮕新庄</td><td>12:18</td><td>12:54</td></tr><tr><td>古口⮕新庄</td><td>13:39</td><td>14:05</td></tr></table></div><div class="mb-3"><span class="tag-a mb-1 inline-block">PLAN A</span> <span class="text-xs font-bold text-muji-planA">新幹線 (轉福島)</span><table class="schedule-table"><tr><th>區間</th><th>班次 1</th><th>班次 2</th></tr><tr><td>新庄⮕福島</td><td>13:18 - 15:14</td><td>15:17 - 17:14</td></tr><tr><td>福島⮕仙台</td><td>15:37 - 17:24</td><td><span class="font-bold text-muji-accent">18:04 - 18:25</span><br>18:17 - 18:38</td></tr></table></div><div><span class="tag-b mb-1 inline-block">PLAN B</span> <span class="text-xs font-bold text-muji-planB">奧羽本線 + 巴士</span><table class="schedule-table"><tr><th>區間</th><th>時間</th></tr><tr><td>新庄⮕山形</td><td>14:19-15:32 / 16:14-17:23</td></tr><tr><td>山形⮕仙台</td><td>高速巴士 (每30分一班)</td></tr><tr><td>JR仙山線</td><td>山形18:02 - 仙台19:32</td></tr>
+            {   day: 6, date: "3/1 (日)",  title: "最上川遊船 -> 仙台",  icon: "fa-ship",  weather: { text: "山形 陰雨 2~7°C", icon: "fa-cloud-rain", link: "Yamagata" },  events: [ { time: "08:10", title: "JR陸羽西線 -> 古口", note: "08:50抵達", type: "train" }, { time: "09:00", title: "最上川遊船", type: "activity", highlight: true },  { type: "html", content: `<div class="mt-2 text-sm bg-white p-3 rounded-lg border border-gray-200"><h4 class="font-bold text-muji-accent mb-2"><i class="fa-solid fa-train"></i> 移動時刻表</h4><div class="mb-3"><span class="font-bold text-gray-600 border-b-2 border-gray-200">Local: 古口/高屋 ⮕ 新庄</span><table class="schedule-table"><tr><th>路線</th><th>出發</th><th>抵達</th></tr><tr><td>高屋⮕新庄</td><td>12:05</td><td>12:54</td></tr><tr><td>古口⮕新庄</td><td>12:18</td><td>12:54</td></tr><tr><td>古口⮕新庄</td><td>13:39</td><td>14:05</td></tr></table></div><div class="mb-3"><span class="tag-a mb-1 inline-block">PLAN A</span> <span class="text-xs font-bold text-muji-planA">新幹線 (轉福島)</span><table class="schedule-table"><tr><th>區間</th><th>班次 1</th><th>班次 2</th></tr><tr><td>新庄⮕福島</td><td>13:18 - 15:14</td><td>15:17 - 17:14</td></tr><tr><td>福島⮕仙台</td><td>15:37 - 17:24</td><td><span class="font-bold text-muji-accent">18:04 - 18:25</span><br>18:17 - 18:38</td></tr></table></div><div><span class="tag-b mb-1 inline-block">PLAN B</span> <span class="text-xs font-bold text-muji-planB">奧羽本線 + 巴士</span><table class="schedule-table"><tr><th>區間</th><th>時間</th></tr><tr><td>新庄⮕山形</td><td>14:19-15:32 / 16:14-17:23</td></tr><tr><td>山形⮕仙台</td><td>高速巴士 (每30分一班)</td></tr><tr><td>JR仙山線</td><td>山形18:02 - 仙台19:32</td></tr>
           </table> </div></div>` }, { time: "19:40", title: "Check in & 晚餐", type: "hotel" }  ] 
           },
             { day: 7, date: "3/2 (一)", title: "分流: 山寺 vs 草莓", icon: "fa-arrows-split-up-and-left", weather: { text: "仙台/山寺 多雲 4~9°C", icon: "fa-cloud-sun", link: "Miyagi/Sendai" }, events: [{ type: "html", content: `<div class="space-y-4"><div class="bg-white rounded-lg border-l-4 border-muji-planA shadow-sm overflow-hidden"><div class="bg-slate-50 p-2 font-bold text-muji-planA"><span><i class="fa-solid fa-person-hiking"></i> PLAN A: 山寺</span></div><div class="p-3 space-y-3"><div class="flex justify-between items-start"><div><div class="text-sm font-bold">出發 (JR仙山線)</div><div class="text-xs text-gray-500">8:18 或 9:12 仙台發</div></div><button onclick="openMap('Yamadera, Yamagata')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i></button></div><div class="flex justify-between items-start pt-2 border-t border-gray-100"><div><div class="text-sm font-bold">13:00 午餐: 焰藏</div></div><button onclick="openMap('Yamagata Soba no Enzou Yamadera')" class="text-muji-accent text-sm"><i class="fa-solid fa-utensils"></i></button></div></div></div><div class="bg-white rounded-lg border-l-4 border-muji-planB shadow-sm overflow-hidden"><div class="bg-orange-50 p-2 font-bold text-muji-planB"><span><i class="fa-solid fa-car-side"></i> PLAN B: 自駕</span></div><div class="p-3 space-y-3"><div class="flex justify-between items-start"><div><div class="text-xs font-bold text-gray-400">08:30</div><div class="text-sm font-bold">仙台朝市</div></div><button onclick="openMap('Sendai Morning Market')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i></button></div><div class="flex justify-between items-start pt-2 border-t border-gray-100"><div><div class="text-xs font-bold text-gray-400">10:00</div><div class="text-sm font-bold">採草莓: 一苺一笑</div></div><button onclick="openMap('Ichigo Ichie Matsumori Farm')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i></button></div><div class="flex justify-between items-start pt-2 border-t border-gray-100"><div><div class="text-xs font-bold text-gray-400">13:00</div><div class="text-sm font-bold">Costco 富谷倉庫店</div></div><button onclick="openMap('Costco Tomiya')" class="text-muji-accent text-sm"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div></div>` }] },
             { 
-                day: 8, date: "3/3 (二)", title: "仙台市區 & 家族會合", icon: "fa-handshake", weather: { text: "仙台 晴 5~10°C", icon: "fa-sun", link: "Miyagi/Sendai" }, 
+                day: 8, date: "3/3 (二)", title: "松島海岸 & 租車接機", icon: "fa-car", weather: { text: "仙台/松島 晴 5~10°C", icon: "fa-sun", link: "Miyagi/Sendai" }, 
                 events: [
-                    { time: "09:30", title: "瑞鳳殿", type: "sight" }, 
-                    { time: "11:00", title: "大崎八幡宮", type: "sight" }, 
-                    { time: "15:00", title: "租車", type: "car", highlight: true },
-                    { time: "16:00", title: "家族抵達仙台機場", note: "星宇 JX862", type: "flight", customColor: "text-muji-join border-muji-join" },
-                    { time: "17:30", title: "仙台車站大會合", note: "接人", type: "activity", highlight: true },
-                    { time: "18:30", title: "晚餐: 肉十八", type: "food" }
+                    { time: "08:20", title: "出門", type: "activity" },
+                    { time: "08:56", title: "JR仙石線 -> 松島海岸", note: "前往松島", type: "train" },
+                    { time: "14:32", title: "JR仙石線 回仙台", note: "返回仙台市區", type: "train" },
+                    { time: "15:30", title: "租車", address: "https://maps.app.goo.gl/JjjcpvuDFha8sNJD7", type: "car", highlight: true },
+                    { time: "17:00", title: "接人 (家族抵達)", note: "仙台車站/機場接送", type: "activity", highlight: true, customColor: "text-muji-join border-muji-join" },
+                    { time: "19:30", title: "晚餐: 肉十八", address: "https://maps.app.goo.gl/deAhptK3BP1uVthQA", type: "food" }
                 ] 
             },
             { day: 9, date: "3/4 (三)", title: "狐狸村 & 藏王樹冰", icon: "fa-snowflake", weather: { text: "藏王 雪 -4~1°C", icon: "fa-snowflake", link: "Miyagi/Shiroishi" }, events: [{ time: "09:00", title: "金神水神社", type: "sight" }, { time: "10:30", title: "藏王狐狸村", address: "Miyagi, Shiroishi", type: "activity", highlight: true }, { time: "12:40", title: "遠刈田溫泉", type: "sight" }, { time: "15:15", title: "藏王樹冰", address: "Zaoonsen, Yamagata", type: "sight", highlight: true }, { time: "17:30", title: "Check-in 山形", type: "hotel" }, { time: "18:00", title: "晚餐", type: "food" }] },
-            { day: 10, date: "3/5 (四)", title: "銀山溫泉 & 松島", icon: "fa-spa", weather: { text: "山形/松島 陰 3~8°C", icon: "fa-cloud", link: "Yamagata" }, events: [{ time: "09:10", title: "道の駅 天童温泉", type: "shop" }, { time: "10:40", title: "銀山溫泉接駁", note: "大正浪漫館搭車", type: "bus", highlight: true }, { time: "16:00", title: "松島海岸", type: "sight" }, { time: "18:00", title: "三井 OUTLET 仙台港", type: "shop" }] },
+            { 
+                day: 10, date: "3/5 (四)", title: "銀山溫泉 & OUTLET", icon: "fa-bag-shopping", weather: { text: "山形/銀山 陰 3~8°C", icon: "fa-cloud", link: "Yamagata" }, 
+                events: [
+                    { time: "08:20", title: "出門", type: "activity" },
+                    { time: "10:10", title: "大正浪漫館", address: "https://maps.app.goo.gl/eeF5h9RiLyqSsffU7", note: "準備搭接駁車", type: "sight" },
+                    { time: "10:20", title: "銀山溫泉接駁", note: "前往銀山溫泉", type: "bus", highlight: true },
+                    { time: "13:00", title: "回程接駁車", note: "返回大正浪漫館", type: "bus" },
+                    { time: "14:30", title: "あ･ら･伊達な道の駅", address: "https://maps.app.goo.gl/DKDspr5omBnNNPDU6", type: "shop" },
+                    { time: "16:30", title: "三井 OUTLET 仙台港", address: "https://maps.app.goo.gl/HLwSGkAYqrsNzVat6", type: "shop" }
+                ] 
+            },
             { day: 11, date: "3/6 (五)", title: "回程", icon: "fa-plane-departure", weather: { text: "仙台/台灣 晴", icon: "fa-sun", link: "Miyagi/Sendai" }, events: [{ time: "11:30", title: "AEON MALL", type: "shop" }, { time: "14:47", title: "前往仙台機場", type: "train" }, { time: "17:25", title: "星宇 JX863 起飛", note: "20:35 抵達台灣", type: "flight", highlight: true }] }
         ];
 
         // --- 2. DYNAMIC ITINERARY LOGIC ---
         let itinerary = JSON.parse(localStorage.getItem('trip_itinerary')) || defaultItinerary;
 
+        // Version Check (Forces update if version changes)
+        const savedVersion = localStorage.getItem('trip_version');
+        if (savedVersion !== DATA_VERSION) {
+            console.log("Updating itinerary to new version...");
+            itinerary = defaultItinerary; // Overwrite
+            localStorage.setItem('trip_itinerary', JSON.stringify(itinerary));
+            localStorage.setItem('trip_version', DATA_VERSION);
+        }
+
         function saveItinerary() {
             localStorage.setItem('trip_itinerary', JSON.stringify(itinerary));
             renderDay(currentDayIndex);
+        }
+
+        function resetDefaultItinerary() {
+            if(confirm('這將會把行程還原成預設值（您新增的行程會消失，但記帳與清單保留），確定嗎？')) {
+                itinerary = defaultItinerary;
+                localStorage.setItem('trip_itinerary', JSON.stringify(itinerary));
+                localStorage.setItem('trip_version', DATA_VERSION);
+                location.reload();
+            }
         }
 
         let currentDayIndex = 0;
@@ -1071,35 +1108,35 @@
             if(address.startsWith('http')) { window.open(address, '_blank'); } else { window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank'); }
         }
         function openWeather(loc) { window.open(`https://www.google.com/search?q=weather+${loc}+japan`, '_blank'); }
-        function showFullImg(src) { const w = window.open(""); w.document.write(`<img src="${src}" style="width:100%">`); }
+        
         // --- 改良版：顯示全螢幕圖片 ---
-function showFullImg(src) {
-    const modal = document.getElementById('imgModal');
-    const img = document.getElementById('imgModalContent');
-    if (!modal || !img) return; // 防呆
-    
-    img.src = src;
-    modal.classList.remove('hidden');
-    // 稍微延遲一點加動畫效果
-    setTimeout(() => {
-        img.classList.remove('scale-95');
-        img.classList.add('scale-100');
-    }, 10);
-}
+        function showFullImg(src) {
+            const modal = document.getElementById('imgModal');
+            const img = document.getElementById('imgModalContent');
+            if (!modal || !img) return; // 防呆
+            
+            img.src = src;
+            modal.classList.remove('hidden');
+            // 稍微延遲一點加動畫效果
+            setTimeout(() => {
+                img.classList.remove('scale-95');
+                img.classList.add('scale-100');
+            }, 10);
+        }
 
-// --- 關閉圖片 ---
-function closeImgModal() {
-    const modal = document.getElementById('imgModal');
-    const img = document.getElementById('imgModalContent');
-    
-    img.classList.remove('scale-100');
-    img.classList.add('scale-95');
-    
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        img.src = '';
-    }, 200);
-}
+        // --- 關閉圖片 ---
+        function closeImgModal() {
+            const modal = document.getElementById('imgModal');
+            const img = document.getElementById('imgModalContent');
+            
+            img.classList.remove('scale-100');
+            img.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                img.src = '';
+            }, 200);
+        }
     </script>
     <div id="imgModal" class="fixed inset-0 z-[1000] bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeImgModal()">
     <img id="imgModalContent" src="" class="max-w-full max-h-full rounded-lg shadow-2xl scale-95 transition-transform duration-300">
