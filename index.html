@@ -461,62 +461,62 @@
                 ] 
             },
             { 
-    day: 6, 
-    date: "3/1 (日)", 
-    title: "最上川遊船 -> 仙台", 
-    icon: "fa-ship", 
-    weather: { text: "山形 陰雨 2~7°C", icon: "fa-cloud-rain", link: "Yamagata" }, 
-    events: [ 
-        { time: "08:10", title: "JR陸羽西線 ⮕ 古口", note: "08:50 抵達古口站", type: "train" }, 
-        { time: "10:30", title: "最上川遊船報到", note: "需提前20分鐘報到", type: "activity", highlight: true },
-        { time: "10:50", title: "最上川遊船出發", note: "船程約 60 分鐘", type: "activity" },
-        { time: "11:55", title: "搭乘接駁巴士回古口", note: "從終點站返回古口站", type: "bus" },
-        { 
-            type: "html", 
-            content: `
-            <div class="mt-2 text-sm bg-white p-3 rounded-lg border border-gray-200">
-                <h4 class="font-bold text-muji-accent mb-2"><i class="fa-solid fa-train"></i> 交通方案選擇</h4>
-                
-                <div class="mb-3">
-                    <span class="font-bold text-gray-600 border-b-2 border-gray-200">Step 1: 古口 ⮕ 新庄 (JR)</span>
-                    <table class="schedule-table mt-1">
-                        <tr><th>古口發</th><th>新庄著</th><th>備註</th></tr>
-                        <tr><td>12:30</td><td>12:54</td><td>接續 13:00 方案</td></tr>
-                        <tr><td>14:45</td><td>15:14</td><td>接續 15:17 方案</td></tr>
-                    </table>
-                </div>
+                day: 6, 
+                date: "3/1 (日)", 
+                title: "最上川遊船 -> 仙台", 
+                icon: "fa-ship", 
+                weather: { text: "山形 陰雨 2~7°C", icon: "fa-cloud-rain", link: "Yamagata" }, 
+                events: [ 
+                    { time: "08:10", title: "JR陸羽西線 ⮕ 古口", note: "08:50 抵達古口站", type: "train" }, 
+                    { time: "10:30", title: "最上川遊船報到", note: "需提前20分鐘報到", type: "activity", highlight: true },
+                    { time: "10:50", title: "最上川遊船出發", note: "船程約 60 分鐘", type: "activity" },
+                    { time: "11:55", title: "搭乘接駁巴士回古口", note: "從終點站返回古口站", type: "bus" },
+                    { 
+                        type: "html", 
+                        content: `
+                        <div class="mt-2 text-sm bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-bold text-muji-accent mb-2"><i class="fa-solid fa-train"></i> 交通方案選擇</h4>
+                            
+                            <div class="mb-3">
+                                <span class="font-bold text-gray-600 border-b-2 border-gray-200">Step 1: 古口 ⮕ 新庄 (JR)</span>
+                                <table class="schedule-table mt-1">
+                                    <tr><th>古口發</th><th>新庄著</th><th>備註</th></tr>
+                                    <tr><td>12:30</td><td>12:54</td><td>接續 13:00 方案</td></tr>
+                                    <tr><td>14:45</td><td>15:14</td><td>接續 15:17 方案</td></tr>
+                                </table>
+                            </div>
 
-                <div class="mb-3">
-                    <span class="tag-a mb-1 inline-block">PLAN A</span> <span class="text-xs font-bold text-muji-planA">新幹線 (福島轉車)</span>
-                    <table class="schedule-table">
-                        <tr><th>新庄發</th><th>福島轉</th><th>備註</th></tr>
-                        <tr><td>13:18</td><td>15:14 著<br><span class="text-muji-accent">15:37 發</span></td><td>抵達仙台</td></tr>
-                        <tr><td>15:17</td><td>17:14 著<br><span class="text-muji-accent">17:24 發</span></td><td>抵達仙台</td></tr>
-                    </table>
-                </div>
+                            <div class="mb-3">
+                                <span class="tag-a mb-1 inline-block">PLAN A</span> <span class="text-xs font-bold text-muji-planA">新幹線 (福島轉車)</span>
+                                <table class="schedule-table">
+                                    <tr><th>新庄發</th><th>福島轉</th><th>備註</th></tr>
+                                    <tr><td>13:18</td><td>15:14 著<br><span class="text-muji-accent">15:37 發</span></td><td>抵達仙台</td></tr>
+                                    <tr><td>15:17</td><td>17:14 著<br><span class="text-muji-accent">17:24 發</span></td><td>抵達仙台</td></tr>
+                                </table>
+                            </div>
 
-                <div class="mb-3">
-                    <span class="tag-b mb-1 inline-block">PLAN B</span> <span class="text-xs font-bold text-muji-planB">直達高速巴士</span>
-                    <table class="schedule-table">
-                        <tr><th>新庄站前發</th><th>仙台站著</th></tr>
-                        <tr><td>13:03</td><td>15:40</td></tr>
-                        <tr><td>15:03</td><td>17:40</td></tr>
-                    </table>
-                </div>
+                            <div class="mb-3">
+                                <span class="tag-b mb-1 inline-block">PLAN B</span> <span class="text-xs font-bold text-muji-planB">直達高速巴士</span>
+                                <table class="schedule-table">
+                                    <tr><th>新庄站前發</th><th>仙台站著</th></tr>
+                                    <tr><td>13:03</td><td>15:40</td></tr>
+                                    <tr><td>15:03</td><td>17:40</td></tr>
+                                </table>
+                            </div>
 
-                <div>
-                    <span class="bg-indigo-600 text-white px-2 py-0.5 rounded text-[10px] mb-1 inline-block">PLAN C</span> <span class="text-xs font-bold text-indigo-700">經山形 (電車+巴士/JR)</span>
-                    <table class="schedule-table">
-                        <tr><th>路段</th><th>時刻</th></tr>
-                        <tr><td>新庄⮕山形</td><td>14:19 - 15:32<br>16:14 - 17:23</td></tr>
-                        <tr><td>山形⮕仙台</td><td>高速巴士 (每30分一班)<br>JR仙山線 (18:02發)</td></tr>
-                    </table>
-                </div>
-            </div>` 
-        }, 
-        { time: "19:40", title: "Check in & 晚餐", type: "hotel" } 
-    ] 
-},
+                            <div>
+                                <span class="bg-indigo-600 text-white px-2 py-0.5 rounded text-[10px] mb-1 inline-block">PLAN C</span> <span class="text-xs font-bold text-indigo-700">經山形 (電車+巴士/JR)</span>
+                                <table class="schedule-table">
+                                    <tr><th>路段</th><th>時刻</th></tr>
+                                    <tr><td>新庄⮕山形</td><td>14:19 - 15:32<br>16:14 - 17:23</td></tr>
+                                    <tr><td>山形⮕仙台</td><td>高速巴士 (每30分一班)<br>JR仙山線 (18:02發)</td></tr>
+                                </table>
+                            </div>
+                        </div>` 
+                    }, 
+                    { time: "19:40", title: "Check in & 晚餐", type: "hotel" } 
+                ] 
+            },
             { day: 7, date: "3/2 (一)", title: "分流: 山寺 vs 草莓", icon: "fa-arrows-split-up-and-left", weather: { text: "仙台/山寺 多雲 4~9°C", icon: "fa-cloud-sun", link: "Miyagi/Sendai" }, events: [{ type: "html", content: `<div class="space-y-4"><div class="bg-white rounded-lg border-l-4 border-muji-planA shadow-sm overflow-hidden"><div class="bg-slate-50 p-2 font-bold text-muji-planA"><span><i class="fa-solid fa-person-hiking"></i> PLAN A: 山寺</span></div><div class="p-3 space-y-3"><div class="flex justify-between items-start"><div><div class="text-sm font-bold">出發 (JR仙山線)</div><div class="text-xs text-gray-500">8:18 或 9:12 仙台發</div></div><button onclick="openMap('Yamadera, Yamagata')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i></button></div><div class="flex justify-between items-start pt-2 border-t border-gray-100"><div><div class="text-sm font-bold">13:00 午餐: 焰藏</div></div><button onclick="openMap('Yamagata Soba no Enzou Yamadera')" class="text-muji-accent text-sm"><i class="fa-solid fa-utensils"></i></button></div></div></div><div class="bg-white rounded-lg border-l-4 border-muji-planB shadow-sm overflow-hidden"><div class="bg-orange-50 p-2 font-bold text-muji-planB"><span><i class="fa-solid fa-car-side"></i> PLAN B: 自駕</span></div><div class="p-3 space-y-3"><div class="flex justify-between items-start"><div><div class="text-xs font-bold text-gray-400">08:30</div><div class="text-sm font-bold">仙台朝市</div></div><button onclick="openMap('Sendai Morning Market')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i></button></div><div class="flex justify-between items-start pt-2 border-t border-gray-100"><div><div class="text-xs font-bold text-gray-400">10:00</div><div class="text-sm font-bold">採草莓: 一苺一笑</div></div><button onclick="openMap('Ichigo Ichie Matsumori Farm')" class="text-muji-accent text-sm"><i class="fa-solid fa-location-dot"></i></button></div><div class="flex justify-between items-start pt-2 border-t border-gray-100"><div><div class="text-xs font-bold text-gray-400">13:00</div><div class="text-sm font-bold">Costco 富谷倉庫店</div></div><button onclick="openMap('Costco Tomiya')" class="text-muji-accent text-sm"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div></div>` }] },
             { 
                 day: 8, date: "3/3 (二)", title: "松島海岸 & 租車接機", icon: "fa-car", weather: { text: "仙台/松島 晴 5~10°C", icon: "fa-sun", link: "Miyagi/Sendai" }, 
@@ -1277,7 +1277,7 @@
         }
         function openMap(address) { 
             if(!address) return; 
-            if(address.startsWith('http')) { window.open(address, '_blank'); } else { window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank'); }
+            if(address.startsWith('http')) { window.open(address, '_blank'); } else { window.open(`http://maps.google.com/?q=${encodeURIComponent(address)}`, '_blank'); }
         }
         function openWeather(loc) { window.open(`https://www.google.com/search?q=weather+${loc}+japan`, '_blank'); }
         
